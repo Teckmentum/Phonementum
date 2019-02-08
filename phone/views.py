@@ -1,13 +1,11 @@
 from django.shortcuts import render
 from twilio.rest import Client
-
+import global_settings as gv
 
 # Create your views here.
 
-#variables para auth con Twilio
-account_sid     = 'ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-auth_token      = 'your_auth_token'
-client          = Client(account_sid, auth_token)
+
+client = Client(gv.twilio_sid, gv.twilio_token)
 
 
 def make_call():
