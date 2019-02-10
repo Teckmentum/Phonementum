@@ -10,11 +10,14 @@ Notes
 
 """
 
+
 from django.contrib import admin
 from django.urls import include,path
+import phone.views as views
+
 
 
 urlpatterns = [
     #path('phone/', include('phone.urls'))  #incluye todos los url dentro del app phone
-    #path('voice/', voi)
+    path('makecall/', views.make_call())
 ]
