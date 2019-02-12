@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 from db_manager import db_getters
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -11,6 +12,7 @@ def index(reques):
     Este app debe recibir las llamadas a Twilio identificar a que numero se estan tratando de comunicar y 
     devolver un xml que da las instrucciones para el numero que se estan tratando de comunicar
 """
+@csrf_exempt
 def incall_lobby(request):
     #request = (HttpRequest)(request)
     to_phone = None
