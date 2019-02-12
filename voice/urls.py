@@ -17,8 +17,8 @@ from django.urls import path
 from voice import views
 
 urlpatterns = [
-    path('lobby', views.incall_lobby()), #path completo voice/lobby
-    path('', views.incall_lobby())
+    path('lobby', views.incall_lobby), #path completo voice/lobby
+    path('', views.incall_lobby)
 
 
 ]
