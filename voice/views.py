@@ -17,11 +17,14 @@ def index(reques):
 def incall_lobby(request):
     #request = (HttpRequest)(request)
 
+    #------------------------
+    #extraer a quien se llama
+    # ------------------------
     to_phone = None
-    #recibir a quien se llama
     if request.method == 'POST':
-        body = request.body.decode('utf-8')
+        body = request.body.decode('utf-8') #body en django por defaul son byte
         body = json.load(body)
+        print(body)
         to_phone = body['To']
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
