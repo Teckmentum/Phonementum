@@ -25,7 +25,9 @@ def incall_lobby(request):
         to_phone = request.POST.get("To")
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
+
     #buscar en la base de datos el xml de este numero
-    print(to_phone)
+
+
     #devolver el xml
     return HttpResponse(open(db_getters.get_lobby_xml(to_phone) ).read())

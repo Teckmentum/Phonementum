@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say >
-    Hello, is your best nightmare
+  <Say voice="woman" language=""es>
+    Gracias por llamar a Itaxes. Para soporte marque el 1. Para ventas marque el 2.
   </Say>
 </Response>
