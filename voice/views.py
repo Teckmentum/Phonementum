@@ -22,17 +22,10 @@ def incall_lobby(request):
     # ------------------------
     to_phone = None
     if request.method == 'POST':
-        print(request.POST.get("To"))
-        body = request.body.decode('utf-8') #body en django por defaul son byte
-        print("primero")
-        print(body)
-        body = json.load(body)
-        print("segundo")
-        print(body)
-        to_phone = body['To']
+        to_phone = request.POST.get("To")
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
     #buscar en la base de datos el xml de este numero
     print(to_phone)
     #devolver el xml
-    return HttpResponse("hola")#open(db_getters.get_lobby_xml(to_phone) ).read())
+    return HttpResponse(open(db_getters.get_lobby_xml(to_phone) ).read())
