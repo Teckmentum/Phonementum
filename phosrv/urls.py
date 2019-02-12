@@ -19,5 +19,6 @@ from django.urls import include,path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('phone/', include('phone.urls'))  #incluye todos los url dentro del app phone
+    path('phone/', include('phone.urls')),  #incluye todos los url dentro del app phone
+    path('voice/', include('voice.urls'))
 ]
