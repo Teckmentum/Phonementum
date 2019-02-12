@@ -15,7 +15,7 @@ def index(reques):
 """
 @csrf_exempt
 def incall_lobby(request):
-    request = (HttpRequest)(request)
+    #request = (HttpRequest)(request)
 
     #------------------------
     #extraer a quien se llama
