@@ -14,10 +14,11 @@ def index(reques):
 """
 @csrf_exempt
 def incall_lobby(request):
-    #request = (HttpRequest)(request)
+    request = (HttpRequest)(request)
     to_phone = None
     #recibir a quien se llama
     if request.method == 'POST':
+        print(request.POST.keys())
         to_phone = str(request.body['To']).strip()
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
