@@ -19,10 +19,10 @@ def incall_lobby(request):
     #recibir a quien se llama
     if request.method == 'POST':
         print(request.POST.keys())
-        to_phone = str(request.body['To']).strip()
+        to_phone = request.body['To']
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
     #buscar en la base de datos el xml de este numero
     print(to_phone)
     #devolver el xml
-    return HttpResponse(open(db_getters.get_lobby_xml(to_phone) ).read())
+    return HttpResponse("hola")#open(db_getters.get_lobby_xml(to_phone) ).read())
