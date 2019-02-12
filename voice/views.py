@@ -23,7 +23,10 @@ def incall_lobby(request):
     to_phone = None
     if request.method == 'POST':
         body = request.body.decode('utf-8') #body en django por defaul son byte
+        print("primero")
+        print(body)
         body = json.load(body)
+        print("segundo")
         print(body)
         to_phone = body['To']
     elif request.method == 'GET':
