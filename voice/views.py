@@ -15,13 +15,14 @@ def index(reques):
 """
 @csrf_exempt
 def incall_lobby(request):
-    #request = (HttpRequest)(request)
+    request = (HttpRequest)(request)
 
     #------------------------
     #extraer a quien se llama
     # ------------------------
     to_phone = None
     if request.method == 'POST':
+        print(request.POST.get("To"))
         body = request.body.decode('utf-8') #body en django por defaul son byte
         print("primero")
         print(body)
