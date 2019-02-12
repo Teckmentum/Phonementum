@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include,path
 
+from phosrv import views_test
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('voice.urls')),
+    path('', views_test.index),
     path('voice/', include('voice.urls'))
 ]
