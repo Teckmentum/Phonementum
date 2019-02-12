@@ -1,3 +1,4 @@
 #ignore virtual enviroment bc they are specific to the pcs
 /venv_srv/
 /venv/
+/.idea/
