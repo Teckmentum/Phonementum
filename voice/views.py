@@ -100,6 +100,7 @@ def enqueue_call(request):
         print("get")
         #print(urllib.parse.unquote(request.GET.u))
         print(request.GET)
+        print("hola: " + str(request.GET))
         digit       = request.GET.get("Digits")
         workflow    = request.GET.get("workflow")
         task        = request.GET.get("task")
