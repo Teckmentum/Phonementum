@@ -83,6 +83,7 @@ def accept_reservation(request):
     print(reservation.reservation_status)
     return HttpResponse({}, content_type="application/json")
 
+
 """Enqueue a selected task
 Description:
 -------------
