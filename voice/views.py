@@ -99,4 +99,4 @@ def enqueue_call(request, workspace, workflow, task):
     enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
     enqueue.task(task_json)
     resp.enqueue(enqueue)
-    return HttpResponse(resp)
+    return HttpResponse(str(resp))
