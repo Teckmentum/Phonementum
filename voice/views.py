@@ -85,7 +85,7 @@ def accept_reservation(request):
 
 @csrf_exempt
 def enqueue_call(request):
-    request = (HttpRequest)(request)
+    #request = (HttpRequest)(request)
     digit = None
     workflow = None
     task = None
