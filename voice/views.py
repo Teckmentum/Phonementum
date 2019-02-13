@@ -57,7 +57,7 @@ def incall_department(request):
 
 @csrf_exempt
 def assignment_callback(request):
-    request = (HttpRequest)(request)
+    #request = (HttpRequest)(request)
     print("---------------------------------------------------------------")
     if request.method == "GET":
         print(request.GET)
