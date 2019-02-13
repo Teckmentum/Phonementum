@@ -99,7 +99,7 @@ def enqueue_call(request):
     elif request.method == 'GET':
         print("get")
         #print(urllib.parse.unquote(request.GET.u))
-        print(request.GET)
+        print(request.GET.dict())
         print("hola: " + str(request.GET))
         digit       = request.GET.get("Digits")
         workflow    = request.GET.get("workflow")
