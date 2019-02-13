@@ -50,3 +50,7 @@ def incall_department(request):
 
     # devolver el xml
     return HttpResponse(open(db_getters.get_department_xml(to_phone, department_id)).read())
+
+@csrf_exempt
+def assignment_callback(request):
+    return HttpResponse({}, content_type="application/json")

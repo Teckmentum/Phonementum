@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import include,path
 
 from phosrv import views_test
+import voice.views as v_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views_test.index),
-    path('voice/', include('voice.urls'))
+    path('voice/', include('voice.urls')),
+    path('assignment_callback',v_views.assignment_callback)
 ]
