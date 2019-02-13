@@ -85,7 +85,7 @@ def accept_reservation(request):
 
 @csrf_exempt
 def enqueue_call(request):
-    #request = (HttpRequest)(request)
+    request = (HttpRequest)(request)
     digit = None
     workflow = None
     task = None
@@ -98,7 +98,7 @@ def enqueue_call(request):
         task        = request.POST.get("task")
     elif request.method == 'GET':
         print("get")
-        print(urllib.parse.unquote(request.GET))
+        #print(urllib.parse.unquote(request.GET.u))
         print(request.GET)
         digit       = request.GET.get("Digits")
         workflow    = request.GET.get("workflow")
