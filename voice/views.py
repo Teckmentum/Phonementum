@@ -87,25 +87,16 @@ def accept_reservation(request):
 def enqueue_call(request, workspace, workflow, task):
     #request = (HttpRequest)(request)
     print(workflow)
+    digit = None
     if request.method == 'POST':
-        print("post")
-        print( request.POST)
-        digit       = request.POST.get("Digits")
-        workflow    = request.POST.get("workflow")
-        task        = request.POST.get("task")
+        digit = request.POST.get("Digits")
     elif request.method == 'GET':
-        print("get")
-        #print(urllib.parse.unquote(request.GET.u))
-        print(request.GET.dict())
-        print("hola: " + str(request.GET))
-        digit       = request.GET.get("Digits")
-        workflow    = request.GET.get("workflow")
-        task        = request.GET.get("task")
+        digit = request.GET.get("Digits")
 
-    task_json = {str(task):str(digit)}
+    task_json = {task:str(digit)}
     print(task_json)
-    #resp = VoiceResponse()
-    #enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
-    #enqueue.task(task_json)
-    #resp.enqueue(enqueue)
-    return HttpResponse("hola")
+    resp = VoiceResponse()
+    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
+    enqueue.task(task_json)
+    resp.enqueue(enqueue)
+    return HttpResponse(resp)
