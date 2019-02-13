@@ -91,7 +91,7 @@ def enqueue_call(request):
     task = None
     if request.method == 'POST':
         print("post")
-        print(urllib.parse.urlencode(request.GET))
+        print(urllib.parse.unquote(request.GET))
         print( request.GET)
         digit       = request.POST.get("Digits")
         workflow    = request.POST.get("workflow")
