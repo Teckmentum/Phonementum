@@ -112,7 +112,7 @@ def enqueue_call(request, workspace, workflow, task_attributes):
 
     #enqueue task
     resp = VoiceResponse()
-    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://com.twilio.music.classical.s3.amazonaws.com/Mellotroniac_-_Flight_Of_Young_Hearts_Flute.mp3")
+    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://phonementum.herokuapp.com/voice/hold")
     enqueue.task(task_json)
     resp.append(enqueue)
     return HttpResponse(str(resp))
@@ -124,4 +124,15 @@ def retrun_mp3():
     #return HttpResponse(file, mimetype="audio/mpeg")
     pass
 
-    #end
+
+@csrf_exempt
+def hold_xml(request):
+    # ------------------------
+    # extraer a quien se llama
+    # ------------------------
+
+
+    # buscar en la base de datos el xml de este numero
+
+    # devolver el xml
+    return HttpResponse(open("+18634003829_soporte_validacion.xml").read())
