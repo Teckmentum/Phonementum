@@ -112,9 +112,16 @@ def enqueue_call(request, workspace, workflow, task_attributes):
 
     #enqueue task
     resp = VoiceResponse()
-    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
+    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://www.e-taxes.us/e-taxes.us/gcastro/etaxes_hold.mp3")
     enqueue.task(task_json)
     resp.append(enqueue)
     return HttpResponse(str(resp))
 
-#end
+@csrf_exempt
+def retrun_mp3():
+    #file = open("/path/to/my/song.mp3", "rb").read()
+    #response['Content-Disposition'] = 'attachment; filename=filename.mp3'
+    #return HttpResponse(file, mimetype="audio/mpeg")
+    pass
+
+    #end
