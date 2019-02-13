@@ -93,7 +93,7 @@ def enqueue_call(request, workspace, workflow, task):
     elif request.method == 'GET':
         digit = request.GET.get("Digits")
 
-    task_json = {task:str(digit)}
+    task_json = '{"' + task + '":"' + str(digit) + '"}'
     print(task_json)
     resp = VoiceResponse()
     enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
