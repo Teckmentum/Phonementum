@@ -66,9 +66,17 @@ def create_task(request):
 
 @csrf_exempt
 def accept_reservation(request):
-    task_sid = "WTf6df9a22f10a9f73dae75c39420ba4fe"
-    reservation_sid = "WRf7cd862b4a520445f063569481af27a8"
+    request = (HttpRequest)(request)
+    #get task sid and reservation sid
+    if request.method == 'GET':
+        task_sid = request.GET.get("task_sid")
+        reservation_sid = request.GET.get("reservation_sid")
+    elif request.method == "POST":
+        task_sid = request.POST.get("task_sid")
+        reservation_sid = request.POST.get("reservation_sid")
+
     reservation = client.taskrouter.workspaces(gv.twilio_etaxes_workspace_sid)\
                     .tasks(task_sid).reservations(reservation_sid)\
                     .update(reservation_status='accepted')
+    print(reservation.reservation_status)
     return HttpResponse({}, content_type="application/json")
