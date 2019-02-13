@@ -112,7 +112,7 @@ def enqueue_call(request, workspace, workflow, task_attributes):
 
     #enqueue task
     resp = VoiceResponse()
-    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://www.e-taxes.us/e-taxes.us/gcastro/etaxes_hold.mp3")
+    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://com.twilio.music.classical.s3.amazonaws.com/Mellotroniac_-_Flight_Of_Young_Hearts_Flute.mp3")
     enqueue.task(task_json)
     resp.append(enqueue)
     return HttpResponse(str(resp))
