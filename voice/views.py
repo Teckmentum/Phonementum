@@ -70,5 +70,5 @@ def accept_reservation(request):
     reservation_sid = "WRf7cd862b4a520445f063569481af27a8"
     reservation = client.taskrouter.workspaces(gv.twilio_etaxes_workspace_sid)\
                     .tasks(task_sid).reservations(reservation_sid)\
-                    .update(reservation_status='acepted')
+                    .update(reservation_status='accepted')
     return HttpResponse({}, content_type="application/json")
