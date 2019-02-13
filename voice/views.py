@@ -66,7 +66,7 @@ def create_task(request):
 
 @csrf_exempt
 def accept_reservation(request):
-    request = (HttpRequest)(request)
+    #request = (HttpRequest)(request)
     #get task sid and reservation sid
     if request.method == 'GET':
         task_sid = request.GET.get("task_sid")
