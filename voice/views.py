@@ -102,8 +102,9 @@ def enqueue_call(request):
         task        = request.GET.get("task")
 
     task_json = {str(task):str(digit)}
-    resp = VoiceResponse()
-    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
-    enqueue.task(task_json)
-    resp.enqueue(enqueue)
-    return HttpResponse(resp)
+    print(task_json)
+    #resp = VoiceResponse()
+    #enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
+    #enqueue.task(task_json)
+    #resp.enqueue(enqueue)
+    return HttpResponse("hola")
