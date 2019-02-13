@@ -31,3 +31,22 @@ def incall_lobby(request):
 
     #devolver el xml
     return HttpResponse(open(db_getters.get_lobby_xml(to_phone) ).read())
+
+@csrf_exempt
+def incall_department(request):
+    # ------------------------
+    # extraer a quien se llama
+    # ------------------------
+    to_phone = None
+    if request.method == 'POST':
+        print(request.POST)
+        print(request.body)
+        to_phone = request.POST.get("To")
+        department_id = request.POST.get("Digits")
+    elif request.method == 'GET':
+        to_phone = str(request.GET.get('To')).strip()
+
+    # buscar en la base de datos el xml de este numero
+
+    # devolver el xml
+    return HttpResponse(open(db_getters.get_department_xml(to_phone, department_id)).read())

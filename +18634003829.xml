@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say voice="woman" language="es">
-    Gracias por llamar a Itaxes. Para soporte marque el 1. Para ventas marque el 2.
-  </Say>
+  <Gather numDigits="1" action="https://phonementum.herokuapp.com/voice/department">
+    <Pause length="2"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        <prosody volume="+200dB" rate="90%">Gracias </prosody>por llamar a <prosody volume="+150dB">I-taxes! </prosody>Para soporte, marque el 1. Para ventas, marque el 2.
+      </prosody>
+    </Say>
+  </Gather>
+
 </Response>
