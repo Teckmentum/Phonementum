@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Gather numDigits="1" action="https://phonementum.herokuapp.com/voice/enqueue_call?workspace=etaxes%26workflow=soporte%26task=selected_soporte">
-        <Say loop="2">Errores de Vadilacion, marque el 1. Instalaciones, marque el 2. Otros, marque el 3.</Say>
+    <Gather numDigits="1" action="https://phonementum.herokuapp.com/voice/enqueue_call/etaxes/soporte/soporte_tecnico">
+        <Say loop="2">Para instalaciones, marque el 1. Errores de vadilacion, marque el 2. Otros, marque el 3.</Say>
     </Gather>
 </Response>

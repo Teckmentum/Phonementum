@@ -83,20 +83,37 @@ def accept_reservation(request):
     print(reservation.reservation_status)
     return HttpResponse({}, content_type="application/json")
 
+"""Enqueue a selected task
+Description:
+-------------
+    Este metodo se encarga de crear un task para TaskRouter y 
+    lo manda a queue con el workflow indicado
+
+Notes:
+-------------
+    Author:  Glorimar
+    Created: Feb-13-2019
+"""
 @csrf_exempt
-def enqueue_call(request, workspace, workflow, task):
+def enqueue_call(request, workspace, workflow, task_attributes):
     #request = (HttpRequest)(request)
-    print(workflow)
+    print("Working in workspace:" + workspace + " workflow: " + workflow)
+
+    #get user selection
     digit = None
     if request.method == 'POST':
         digit = request.POST.get("Digits")
     elif request.method == 'GET':
         digit = request.GET.get("Digits")
 
-    task_json = '{"' + task + '":"' + str(digit) + '"}'
-    print(task_json)
+    #set task attributes
+    task_json = '{"' + task_attributes + '":"' + str(digit) + '"}'
+
+    #enqueue task
     resp = VoiceResponse()
     enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
     enqueue.task(task_json)
     resp.append(enqueue)
     return HttpResponse(str(resp))
+
+#end
