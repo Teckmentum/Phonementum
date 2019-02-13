@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpRequest
 from db_manager import db_getters
 from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
+from twilio.twiml.voice_response import VoiceResponse, Gather, Enqueue
 import global_settings as gv
 
 client = Client(gv.twilio_sid, gv.twilio_token)
@@ -80,3 +81,27 @@ def accept_reservation(request):
                     .update(reservation_status='accepted')
     print(reservation.reservation_status)
     return HttpResponse({}, content_type="application/json")
+
+@csrf_exempt
+def enqueue_call(request):
+    #request = (HttpRequest)(request)
+    digit = None
+    workflow = None
+    task = None
+    if request.method == 'POST':
+        print(request.GET)
+        digit       = request.POST.get("Digits")
+        workflow    = request.POST.get("workflow")
+        task        = request.POST.get("task")
+    elif request.method == 'GET':
+        print(request.POST)
+        digit       = request.GET.get("Digits")
+        workflow    = request.GET.get("workflow")
+        task        = request.GET.get("task")
+
+    task_json = {str(task):str(digit)}
+    resp = VoiceResponse()
+    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow])
+    enqueue.task(task_json)
+    resp.enqueue(enqueue)
+    return HttpResponse(resp)

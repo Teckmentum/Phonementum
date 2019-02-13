@@ -21,6 +21,7 @@ urlpatterns = [
     path('lobby', views.incall_lobby),
     path('department/', views.incall_department),
     path('department', views.incall_department),
+    path('enqueue_call', views.enqueue_call),
     path('', views.index)
 
 
