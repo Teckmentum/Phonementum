@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 from db_manager import db_getters
 from django.views.decorators.csrf import csrf_exempt
-import json
+from twilio.rest import Client
+import global_settings as gv
 
+client = Client(gv.twilio_sid, gv.twilio_token)
 # Create your views here.
 
 def index(reques):
@@ -54,3 +56,9 @@ def incall_department(request):
 @csrf_exempt
 def assignment_callback(request):
     return HttpResponse({}, content_type="application/json")
+
+@csrf_exempt
+def create_task(request):
+    task = client.taskrouter.workspaces(gv.twilio_etaxes_workspace_sid).tasks.create(gv.twilio_etaxes_workflow_sid["soporte"], attributes="{'selected_soporte':3}")
+    print(task.attributes)
+    return HttpResponse({},content_type="application/json")
