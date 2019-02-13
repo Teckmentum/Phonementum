@@ -59,6 +59,7 @@ def assignment_callback(request):
 
 @csrf_exempt
 def create_task(request):
+    print(gv.twilio_etaxes_workspace_sid + "         " + gv.twilio_etaxes_workflow_sid["soporte"])
     task = client.taskrouter.workspaces(gv.twilio_etaxes_workspace_sid).tasks.create(gv.twilio_etaxes_workflow_sid["soporte"], attributes="{'selected_soporte':3}")
     print(task.attributes)
     return HttpResponse({},content_type="application/json")
