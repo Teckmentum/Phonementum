@@ -63,3 +63,12 @@ def create_task(request):
     task = client.taskrouter.workspaces(gv.twilio_etaxes_workspace_sid).tasks.create(workflow_sid=gv.twilio_etaxes_workflow_sid["soporte"], attributes='{"selected_soporte":"3"}')
     print(task.attributes)
     return HttpResponse({},content_type="application/json")
+
+@csrf_exempt
+def accept_reservation(request):
+    task_sid = "WTf6df9a22f10a9f73dae75c39420ba4fe"
+    reservation_sid = "WRf7cd862b4a520445f063569481af27a8"
+    reservation = client.taskrouter.workspaces(gv.twilio_etaxes_workspace_sid)\
+                    .tasks(task_sid).reservations(reservation_sid)\
+                    .update(reservation_status='acepted')
+    return HttpResponse({}, content_type="application/json")

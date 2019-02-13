@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02e90df3-667f-4aa1-b32b-c62d21326a4e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/phosrv/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/phosrv/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/voice/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/voice/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -12,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/voice/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="982">
-              <caret line="62" column="177" selection-start-line="62" selection-start-column="177" selection-end-line="62" selection-end-column="177" />
+            <state relative-caret-position="931">
+              <caret line="67" column="22" selection-start-line="67" selection-start-column="4" selection-end-line="67" selection-end-column="22" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -33,11 +34,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/phosrv/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="459">
+              <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
               <folding>
                 <element signature="e#630#662#0" expanded="true" />
               </folding>
@@ -94,9 +95,9 @@
         <option value="$PROJECT_DIR$/+18634003829_dept_2.xml" />
         <option value="$PROJECT_DIR$/voice/urls.py" />
         <option value="$PROJECT_DIR$/+18634003829_dept_1.xml" />
-        <option value="$PROJECT_DIR$/phosrv/urls.py" />
         <option value="$PROJECT_DIR$/global_settings.py" />
         <option value="$PROJECT_DIR$/voice/views.py" />
+        <option value="$PROJECT_DIR$/phosrv/urls.py" />
       </list>
     </option>
   </component>
@@ -361,16 +362,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/phosrv/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#630#662#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/global_settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -380,10 +371,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/voice/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="982">
-          <caret line="62" column="177" selection-start-line="62" selection-start-column="177" selection-end-line="62" selection-end-column="177" />
+        <state relative-caret-position="931">
+          <caret line="67" column="22" selection-start-line="67" selection-start-column="4" selection-end-line="67" selection-end-column="22" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/phosrv/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
+          <folding>
+            <element signature="e#630#662#0" expanded="true" />
           </folding>
         </state>
       </provider>
