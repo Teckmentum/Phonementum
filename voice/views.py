@@ -89,12 +89,14 @@ def enqueue_call(request):
     workflow = None
     task = None
     if request.method == 'POST':
+        print("post")
         print(request.GET)
         digit       = request.POST.get("Digits")
         workflow    = request.POST.get("workflow")
         task        = request.POST.get("task")
     elif request.method == 'GET':
-        print(request.POST)
+        print("get")
+        print(request.GET)
         digit       = request.GET.get("Digits")
         workflow    = request.GET.get("workflow")
         task        = request.GET.get("task")
