@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
 from twilio.twiml.voice_response import VoiceResponse, Gather, Enqueue
 import global_settings as gv
+import urllib.parse
 
 client = Client(gv.twilio_sid, gv.twilio_token)
 # Create your views here.
@@ -90,7 +91,8 @@ def enqueue_call(request):
     task = None
     if request.method == 'POST':
         print("post")
-        print(request.GET)
+        print(urllib.parse.urlencode(request.GET))
+        print( request.GET)
         digit       = request.POST.get("Digits")
         workflow    = request.POST.get("workflow")
         task        = request.POST.get("task")
