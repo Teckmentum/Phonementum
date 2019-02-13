@@ -16,7 +16,7 @@
         <entry file="file://$PROJECT_DIR$/voice/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="982">
-              <caret line="62" column="98" selection-start-line="62" selection-start-column="98" selection-end-line="62" selection-end-column="98" />
+              <caret line="62" column="175" selection-start-line="62" selection-start-column="175" selection-end-line="62" selection-end-column="175" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -381,7 +381,7 @@
     <entry file="file://$PROJECT_DIR$/voice/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="982">
-          <caret line="62" column="98" selection-start-line="62" selection-start-column="98" selection-end-line="62" selection-end-column="98" />
+          <caret line="62" column="175" selection-start-line="62" selection-start-column="175" selection-end-line="62" selection-end-column="175" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
