@@ -132,18 +132,17 @@ def retrun_mp3():
 
 @csrf_exempt
 def sip_redirect(request):
-    #request = (HttpRequest)(request)
+    request = (HttpRequest)(request)
+    digits = None
+    domain = None
+    department = None
     if request.method == "POST":
-        print(request.POST)
-        print("======================================================")
-        print(request.POST.values())
-        print("*****************************************************")
-        print(request.GET.items())
-        print(request.GET.dict())
+        digit       = request.POST.get("Digits")
+        domain      = request.GET.get("domain")
+        department  = request.GET.get("department")
     elif request.method == "GET":
-        print(request.GET)
-        print("======================================================")
-        print(request.GET.values())
+        pass
+    print(department + "  " + domain)
     return HttpResponse(open("test.xml").read())
 
 @csrf_exempt
