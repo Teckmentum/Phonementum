@@ -138,7 +138,8 @@ def sip_redirect(request):
         print("======================================================")
         print(request.POST.values())
         print("*****************************************************")
-        print(request.GET.values())
+        print(request.GET.items())
+        print(request.GET.dict())
     elif request.method == "GET":
         print(request.GET)
         print("======================================================")
