@@ -151,13 +151,14 @@ def sip_redirect(request):
     department = None
     if request.method == "POST":
         digit       = request.POST.get("Digits")
-        to          = request.POST.get("Digits")
+        to          = request.POST.get("To")
         domain      = request.GET.get("domain")
         department  = request.GET.get("department")
     elif request.method == "GET":
         pass
     #return el xml adecuado dependiendo de los parametros
-    return HttpResponse(open(to + "_dept_" + department + "_sel_" + digit).read())
+    print("devolviendo el file: " + to + "_dept_" + department + "_sel_" + digit + ".xml")
+    return HttpResponse(open(to + "_dept_" + department + "_sel_" + digit + ".xml").read())
 
 @csrf_exempt
 def hold_xml(request):
