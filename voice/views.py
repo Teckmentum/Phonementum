@@ -43,12 +43,11 @@ def incall_department(request):
     # ------------------------
     to_phone = None
     if request.method == 'POST':
-        print(request.POST)
-        print(request.body)
         to_phone = request.POST.get("To")
         department_id = request.POST.get("Digits")
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
+        department_id = request.GET.get("Digits")
 
     # buscar en la base de datos el xml de este numero
 
@@ -131,6 +130,14 @@ def retrun_mp3():
     #return HttpResponse(file, mimetype="audio/mpeg")
     pass
 
+@csrf_exempt
+def sip_redirect(request):
+    request = (HttpRequest)(request)
+    if request.method == "POST":
+        print(request.POST)
+    elif request.method == "GET":
+        print(request.GET)
+    return HttpResponse(open("test.xml").read())
 
 @csrf_exempt
 def hold_xml(request):
