@@ -10,15 +10,16 @@ Notes
 
 """
 
-
+"""URL para el app de Voice
+"""
 from django.contrib import admin
 from django.urls import path
 
 from voice import views
 
 urlpatterns = [
-    path('lobby/', views.incall_lobby), #path completo voice/lobby
     path('lobby', views.incall_lobby),
+    path('lobby/', views.incall_lobby), #path completo voice/lobby
     path('department/', views.incall_department),
     path('department', views.incall_department),
     path('enqueue_call/<str:workspace>/<str:workflow>/<str:task_attributes>', views.enqueue_call),
