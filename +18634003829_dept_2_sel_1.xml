@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+<!--Redirecciona un sip para renovaciones-->
+<Dial>
+    <Sip>
+        sip:ventas1@etaxes.sip.us1.twilio.com <!--Ventas 1 es renovaciones-->
+    </Sip>
+</Dial>
+</Response>

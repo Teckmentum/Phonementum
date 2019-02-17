@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-<Say>Haz llamado a ventas</Say>
+
+    <Gather numDigits="1" action="https://phonementum.herokuapp.com/voice/sip_redirect?domain=etaxes&amp;department=2">
+        <Say loop="4">Para renovaciones, marque el 1. Clientes nuevo, marque el 2.</Say>
+    </Gather>
 </Response>
