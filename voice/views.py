@@ -135,6 +135,10 @@ def sip_redirect(request):
     #request = (HttpRequest)(request)
     if request.method == "POST":
         print(request.POST)
+        print("======================================================")
+        print(request.POST.values())
+        print("*****************************************************")
+        print(request.GET.values())
     elif request.method == "GET":
         print(request.GET)
         print("======================================================")
