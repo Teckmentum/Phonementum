@@ -130,20 +130,34 @@ def retrun_mp3():
     #return HttpResponse(file, mimetype="audio/mpeg")
     pass
 
+"""Redirect call to a sip endpoint
+Description:
+------------
+    Este metodo recibe como query parametrs: domain and department.
+    Depende del dominio y el departamento return un xml con instrucciones a que sip redirigir la llamada
+
+Notes:
+-------
+    Author: Glorimar Castro
+"""
 @csrf_exempt
 def sip_redirect(request):
     #request = (HttpRequest)(request)
+
+    #get parametrs
     digits = None
+    to = None
     domain = None
     department = None
     if request.method == "POST":
         digit       = request.POST.get("Digits")
+        to          = request.POST.get("Digits")
         domain      = request.GET.get("domain")
         department  = request.GET.get("department")
     elif request.method == "GET":
         pass
-    print(department + "  " + domain)
-    return HttpResponse(open("test.xml").read())
+    #return el xml adecuado dependiendo de los parametros
+    return HttpResponse(open(to + "_dept_" + department + "_sel_" + digit).read())
 
 @csrf_exempt
 def hold_xml(request):

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Redirecciona un sip para soporte de validaciones-->
+<Response>
+<Dial>
+    <Sip>
+        sip:support1@etaxes.sip.us1.twilio.com <!--Support 1 es validacion y planillas rechazadas-->
+    </Sip>
+</Dial>
+</Response>

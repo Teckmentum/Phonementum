@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Redirecciona un sip para soporte general-->
+<Response>
+<Dial>
+    <Sip>
+        sip:support3@etaxes.sip.us1.twilio.com <!--Support 3 es de instalacion y general-->
+    </Sip>
+</Dial>
+</Response>
