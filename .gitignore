@@ -7,3 +7,4 @@ venv/*
 Lib/*
 /venv_lpt/
 /venv_lpt/*
+/venv_chris/
