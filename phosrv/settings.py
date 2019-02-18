@@ -26,6 +26,7 @@ SECRET_KEY = '0z%dtrr@kk_hxs#+@z+-0itkl#4t9pwhs*t3rt2i=v(s1p3_jl'
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
+                 '127.0.0.1',
                  "phonementum.herokuapp.com"]
 
 
