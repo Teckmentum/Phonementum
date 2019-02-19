@@ -2,3 +2,9 @@
 /venv_srv/
 /venv/
 /.idea/
+/.idea/*
+venv/*
+Lib/*
+/venv_lpt/
+/venv_lpt/*
+/venv_chris/

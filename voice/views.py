@@ -43,12 +43,11 @@ def incall_department(request):
     # ------------------------
     to_phone = None
     if request.method == 'POST':
-        print(request.POST)
-        print(request.body)
         to_phone = request.POST.get("To")
         department_id = request.POST.get("Digits")
     elif request.method == 'GET':
         to_phone = str(request.GET.get('To')).strip()
+        department_id = request.GET.get("Digits")
 
     # buscar en la base de datos el xml de este numero
 
@@ -57,6 +56,13 @@ def incall_department(request):
 
 @csrf_exempt
 def assignment_callback(request):
+    #request = (HttpRequest)(request)
+    print("---------------------------------------------------------------")
+    if request.method == "GET":
+        print(request.GET)
+    elif request.method == "POST":
+        print(request.POST)
+    print("---------------------------------------------------------------")
     return HttpResponse({}, content_type="application/json")
 
 @csrf_exempt
@@ -112,7 +118,7 @@ def enqueue_call(request, workspace, workflow, task_attributes):
 
     #enqueue task
     resp = VoiceResponse()
-    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://com.twilio.music.classical.s3.amazonaws.com/Mellotroniac_-_Flight_Of_Young_Hearts_Flute.mp3")
+    enqueue = resp.enqueue(None, workflow_sid=gv.twilio_etaxes_workflow_sid[workflow], wait_url="http://phonementum.herokuapp.com/voice/hold")
     enqueue.task(task_json)
     resp.append(enqueue)
     return HttpResponse(str(resp))
@@ -124,4 +130,44 @@ def retrun_mp3():
     #return HttpResponse(file, mimetype="audio/mpeg")
     pass
 
-    #end
+"""Redirect call to a sip endpoint
+Description:
+------------
+    Este metodo recibe como query parametrs: domain and department.
+    Depende del dominio y el departamento return un xml con instrucciones a que sip redirigir la llamada
+
+Notes:
+-------
+    Author: Glorimar Castro
+"""
+@csrf_exempt
+def sip_redirect(request):
+    #request = (HttpRequest)(request)
+
+    #get parametrs
+    digits = None
+    to = None
+    domain = None
+    department = None
+    if request.method == "POST":
+        digit       = request.POST.get("Digits")
+        to          = request.POST.get("To")
+        domain      = request.GET.get("domain")
+        department  = request.GET.get("department")
+    elif request.method == "GET":
+        pass
+    #return el xml adecuado dependiendo de los parametros
+    print("devolviendo el file: " + to + "_dept_" + department + "_sel_" + digit + ".xml")
+    return HttpResponse(open(to + "_dept_" + department + "_sel_" + digit + ".xml").read())
+
+@csrf_exempt
+def hold_xml(request):
+    # ------------------------
+    # extraer a quien se llama
+    # ------------------------
+
+
+    # buscar en la base de datos el xml de este numero
+
+    # devolver el xml
+    return HttpResponse(open("+18634003829_soporte_validacion.xml").read())

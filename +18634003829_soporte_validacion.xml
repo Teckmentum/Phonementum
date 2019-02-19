@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say>Por favor espere mientras uno de nuestros agente atiende su llamada.
+  </Say>
+  <Play>
+      http://www.e-taxes.us/e-taxes.us/gcastro/etaxes_hold.mp3
+  </Play>
+  <Say>Todos nuestros agentes se encuentran ocupados. Favor de esperar mientras es atendido.
+  </Say>
+</Response>

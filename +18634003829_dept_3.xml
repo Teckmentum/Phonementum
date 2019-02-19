@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say voice="Polly.Penelope">
+        Esta siendo comunicado con el departamento de administración.
+    </Say>
+    <Dial>
+    <Sip>
+        sip:administraction@etaxes.sip.us1.twilio.com
+    </Sip>
+</Dial>
+</Response>
