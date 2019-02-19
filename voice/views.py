@@ -43,16 +43,16 @@ def incall_department(request):
     # ------------------------
     to_phone = None
     if request.method == 'POST':
-        to_phone = request.POST.get("To")
-        department_id = request.POST.get("Digits")
+        to_phone = request.POST.get(gv.TO)
+        department_id = request.POST.get(gv.SELECTION)
     elif request.method == 'GET':
-        to_phone = str(request.GET.get('To')).strip()
-        department_id = request.GET.get("Digits")
+        to_phone = str(request.GET.get(gv.TO)).strip()
+        department_id = request.GET.get(gv.SELECTION)
 
     # buscar en la base de datos el xml de este numero
 
     # devolver el xml
-    return HttpResponse(open(db_getters.get_department_xml(to_phone, department_id)).read())
+    return HttpResponse(open(to_phone + "_dep_" + department_id + ".xml").read())
 
 @csrf_exempt
 def assignment_callback(request):

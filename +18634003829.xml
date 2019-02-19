@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Gather numDigits="1" action="https://phonementum.herokuapp.com/voice/department" method="GET">
-    <Pause length="2"/>
-    <Say voice="Polly.Penelope" loop="4">
+  <Gather numDigits="1" action="http://e8efb9de.ngrok.io/voice/department" method="GET">
+    <Pause length="1"/>
+    <Say voice="Polly.Penelope">
       <prosody pitch="+15%">
-        <prosody volume="+200dB" rate="90%">Gracias </prosody>por llamar a <prosody volume="+150dB">I-taxes! </prosody>Para soporte, marque el 1. Para ventas, marque el 2. Para Administración, marque el 3.
-      </prosody>
-                                              ,                    <!--Espacios dejados para hacer una pausa antes del loop-->
+        <prosody volume="+200dB" rate="90%">Gracias </prosody>por llamar a <prosody volume="+150dB"> Taxes of Puerto Rico! </prosody>Para soporte, marque el 1. Para ventas, marque el 2. Para administracion, marque el 3.
+      </prosody>                                  ,                    <!--Espacios dejados para hacer una pausa antes del loop-->
+    </Say>
+    <Pause length="4"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        Para soporte, marque el 1. Para ventas, marque el 2. Para administracion, marque el 3.
+      </prosody>                                  ,
+    </Say>
+    <Pause length="4"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        Para soporte, marque el 1. Para ventas, marque el 2. Para administracion, marque el 3.
+      </prosody>                                  ,
+    </Say>
+    <Pause length="4"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        Para soporte, marque el 1. Para ventas, marque el 2. Para administracion, marque el 3.
+      </prosody>                                  ,
     </Say>
   </Gather>
 
