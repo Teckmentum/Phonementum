@@ -171,3 +171,52 @@ def hold_xml(request):
 
     # devolver el xml
     return HttpResponse(open("+18634003829_soporte_validacion.xml").read())
+
+
+"""Metodo para handle incoming call to umbrella companies
+Description:
+------------
+    Umbrella company es una compania que posee otras companias por lo que el mensaje
+    que devuelve es uno que redirecciona a otros numeros de telefono
+
+Parameters:
+-----------
+    request: HttpRequest 
+
+Notes:
+------
+    Autor: Glorimar Castro-Noriega
+    State: por el momento devuelve un xml hard coded debido a que no tenemos la base de datos ni los conectores
+"""
+@csrf_exempt
+def callUmbrellaCo(request):
+    #request = (HttpRequest)(request)
+    #variables a utilizar
+    to_num      = None
+    from_num    = None
+    selection   = None
+
+
+    #obtener from, to
+    if request.method == "GET":
+        to_num = request.GET.get(gv.TO)
+        from_num = request.GET.get(gv.FROM)
+        selection = request.GET.get(gv.SELECTION)
+    elif request.method == "POST":
+        to_num = request.POST.get(gv.TO)
+        from_num = request.POST.get(gv.FROM)
+        selection = request.POST.get(gv.SELECTION)
+
+    #manejar variables q no se le paso data
+    if to_num == None or from_num == None or selection == None:
+        #return error
+        pass
+
+    #buscar en la base de dato cuales companias estan debajo de la umbrella
+
+    #formar un xml q contenga un say que mencione las companias
+
+    #devolver dicho xml
+    return
+
+
