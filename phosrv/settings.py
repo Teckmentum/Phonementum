@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost',
                  '127.0.0.1',
+                 "3222a839.ngrok.io",
                  "phonementum.herokuapp.com"]
 
 

@@ -6,12 +6,14 @@ import global_settings as gv
 account_sid = gv.twilio_sid
 auth_token = gv.twilio_token
 client = Client(account_sid, auth_token)
+people = ['+17872152776', '+17872459899']
+
 
 message = client.messages \
                 .create(
-                     body="Hola hermosa~",
+                     body="lo logre!",
                      from_='+14154171040',
-                     to='+17872459899'
+                     to=people
                  )
 
 print(message.sid)
