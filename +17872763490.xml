@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Gather numDigits="1" action="http://74a8ba1a.ngrok.io/voice/company" method="GET">
+        <Pause length="1"/>
+        <Say voice="Polly.Penelope">
+            <prosody volume="+200dB" rate="85%">Gracias por llamar a i-tax en familia.</prosody>
+        </Say>
+    </Gather>
+</Response>

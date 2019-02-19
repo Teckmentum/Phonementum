@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpRequest
 from db_manager import db_getters
 from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
-from twilio.twiml.voice_response import VoiceResponse, Gather, Enqueue
+from twilio.twiml.voice_response import VoiceResponse, Gather, Enqueue, Say
 import global_settings as gv
 import urllib.parse
 
@@ -195,14 +195,17 @@ def callUmbrellaCo(request):
     to_num      = None
     from_num    = None
     selection   = None
-
-
+    timeout     = 20 #por default tendra 20 seg al menos q en la base de dato se muestre lo contrario
+    company_name = "i-taxes"
     #obtener from, to
     if request.method == "GET":
         to_num = request.GET.get(gv.TO)
         from_num = request.GET.get(gv.FROM)
         selection = request.GET.get(gv.SELECTION)
+        print("entro a get")
     elif request.method == "POST":
+        print("entro a post")
+        print(request.POST.dict())
         to_num = request.POST.get(gv.TO)
         from_num = request.POST.get(gv.FROM)
         selection = request.POST.get(gv.SELECTION)
@@ -211,12 +214,26 @@ def callUmbrellaCo(request):
     if to_num == None or from_num == None or selection == None:
         #return error
         pass
-
+    #si hay una seleccion redirigir a callCo()
+    print("===============")
+    print(selection)
+    if selection != None:
+        #las opciones aqui son temporeras en los que tenemos una base de  datos
+        opciones = {
+            "1": '+17872763490',
+            "2": gv.twilio_num_etax_fl,
+            "3": '+17872573957'
+        }
+        if selection == "1" or selection == "2" or selection == "3":
+            return HttpResponse(open(opciones[selection] + ".xml").read())
+        else:
+            return HttpResponse(open("option_not_recognized.xml").read())
     #buscar en la base de dato cuales companias estan debajo de la umbrella
 
     #formar un xml q contenga un say que mencione las companias
 
-    #devolver dicho xml
-    return
+    #devolver dicho xml/crear response
+
+    return HttpResponse(open(to_num + ".xml").read())
 
 

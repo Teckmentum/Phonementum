@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Pause length="2"/>
+    <Say voice="Polly.Penelope">
+        <prosody volume="+200dB" rate="85%">Gracias por llamar a Tax Eduketcion grup.</prosody>
+    </Say>
+    <Dial>
+        +17872573957
+    </Dial>
+</Response>

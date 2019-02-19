@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Gather numDigits="1" action="http://74a8ba1a.ngrok.io/voice/umbrellacompany" method="GET">
+    <Pause length="1"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        <prosody volume="+200dB" rate="85%">Gracias </prosody>por llamar a <prosody volume="+150dB">I-taxes! </prosody><prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  eduketion  grup marque el 3.</prosody>
+      </prosody>
+    </Say>
+    <Pause length="3"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        <prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  eduketion  grup marque el 3.</prosody>
+      </prosody>
+    </Say>
+    <Pause length="3"/>
+    <Say voice="Polly.Penelope">
+      <prosody pitch="+15%">
+        <prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  eduketion  grup marque el 3.</prosody>
+      </prosody>
+    </Say>
+    <Pause length="4"/>
+    <Say voice="Polly.Penelope">
+      Lo sentimos no entendimos su respuesta, trate más tarde.
+    </Say>
+  </Gather>
+
+</Response>

@@ -25,7 +25,8 @@ urlpatterns = [
     path('sip_redirect', views.sip_redirect),
     path('enqueue_call/<str:workspace>/<str:workflow>/<str:task_attributes>', views.enqueue_call),
     path('', views.index),
-    path('hold', views.hold_xml)
+    path('hold', views.hold_xml),
+    path('umbrellacompany', views.callUmbrellaCo)
 
 
 ]
