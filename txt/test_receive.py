@@ -13,7 +13,7 @@ def sms_reply(request):
     resp = MessagingResponse()
 
     # Add a message
-    resp.message("Ahoy! Thanks so much for your message.")
+    resp.message("Ahoy! Thanks so much for your message, arrrgh.")
 
     return HttpResponse(resp)
 
