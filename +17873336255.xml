@@ -4,19 +4,19 @@
     <Pause length="1"/>
     <Say voice="Polly.Penelope">
       <prosody pitch="+15%">
-        <prosody volume="+200dB" rate="85%">Gracias </prosody>por llamar a <prosody volume="+150dB">I-taxes! </prosody><prosody rate="90%"> Para i-tax en familia, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  eduketion  grup marque el 3.</prosody>
+        <prosody volume="+200dB" rate="85%">Gracias </prosody>por llamar a <prosody volume="+150dB">I-taxes! </prosody><prosody rate="90%"> Para i-tax en familia, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  edukeition  grup marque el 3.</prosody>
       </prosody>
     </Say>
     <Pause length="3"/>
     <Say voice="Polly.Penelope">
       <prosody pitch="+15%">
-        <prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  eduketion  grup marque el 3.</prosody>
+        <prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  edukeition  grup marque el 3.</prosody>
       </prosody>
     </Say>
     <Pause length="3"/>
     <Say voice="Polly.Penelope">
       <prosody pitch="+15%">
-        <prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  eduketion  grup marque el 3.</prosody>
+        <prosody rate="90%"> Para i-tax, marque el 1. Para Taxes of pi ar, marque el 2. Para Tax  edukeition  grup marque el 3.</prosody>
       </prosody>
     </Say>
     <Pause length="4"/>
