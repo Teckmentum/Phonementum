@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Pause length="2"/>
+    <Pause length="1"/>
     <Say voice="Polly.Penelope">
         <prosody volume="+200dB" rate="85%">Gracias por llamar a Taxes of Puerto Rico.</prosody>
     </Say>
