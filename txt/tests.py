@@ -1,4 +1,4 @@
-
+from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
 import global_settings as gv
 
@@ -8,7 +8,6 @@ auth_token = gv.twilio_token
 client = Client(account_sid, auth_token)
 people = ['+17872152776', '+17872459899','+17873929361']
 
-@csrf_exempt
 for peoples in people:
    message = client.messages.create(
         body= "hey all you people, would you listen to me!",
