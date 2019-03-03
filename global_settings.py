@@ -30,3 +30,11 @@ TO          = "To"
 FROM        = "From"
 SELECTION   = "Digits"
 
+
+"""
+POSTGRESS DB
+"""
+postgres_host = os.environ["postgres_host"]
+postgres_database = os.environ["postgres_database"]
+postgres_user = os.environ["postgres_user"]
+postgres_password = os.environ["postgres_password"]
