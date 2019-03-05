@@ -236,11 +236,31 @@ def callUmbrellaCo(request):
 
 @csrf_exempt
 def voice_call(request):
-    #obtener parametros
-    result = {}
+    """
+    Return a xml with TwiML instructions for a Twilio call without gather.
+    The xml is look up in the database for the table and id specified in
+    the request. All incoming calls to twilio numbers create a request to this method.
+
+    Args:
+        request (HttpRequest): table and is params have to be at query request.
+        At the Post body To need to be a param
+
+    Returns:
+        HttpResponse: if there wasnt any error it return a xml with twiml instruction for twilio
+
+    Notes:
+        1. Author: Glorimar Castro-Noriega
+        2. Date: 3-5-19
+    """
+
+    parameters = {}
+    response = None
+
+    # get and validate parameters, also handle any error
     parameters = voice_helpers.extract_parameters(request)
     if parameters['error'] is False:
+        # get xml from db if id exist in table if not return error
         pass
     else:
-        HttpResponse
-    return HttpResponse("hola")
+        response = HttpResponse(parameters['message'], status=parameters['status'])
+    return response
