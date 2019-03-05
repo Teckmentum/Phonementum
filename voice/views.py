@@ -1,11 +1,10 @@
-from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 from db_manager import db_getters
 from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
 from twilio.twiml.voice_response import VoiceResponse, Gather, Enqueue, Say
 import global_settings as gv
-import urllib.parse
+from voice.twilio2voice_handeler import voice_helpers
 
 client = Client(gv.twilio_sid, gv.twilio_token)
 # Create your views here.
@@ -172,24 +171,22 @@ def hold_xml(request):
     # devolver el xml
     return HttpResponse(open("+18634003829_soporte_validacion.xml").read())
 
-
-"""Metodo para handle incoming call to umbrella companies
-Description:
-------------
+@csrf_exempt
+def callUmbrellaCo(request):
+    """
     Umbrella company es una compania que posee otras companias por lo que el mensaje
     que devuelve es uno que redirecciona a otros numeros de telefono
 
-Parameters:
------------
-    request: HttpRequest 
+    Args:
+        request (HttpRequest):
 
-Notes:
-------
-    Autor: Glorimar Castro-Noriega
-    State: por el momento devuelve un xml hard coded debido a que no tenemos la base de datos ni los conectores
-"""
-@csrf_exempt
-def callUmbrellaCo(request):
+    Returns:
+
+    Notes:
+        1. Autor: Glorimar Castro-Noriega
+        2. State: por el momento devuelve un xml hard coded debido a que no tenemos la base de datos ni los conectores
+
+    """
     #request = (HttpRequest)(request)
     #variables a utilizar
     to_num      = None
@@ -237,3 +234,33 @@ def callUmbrellaCo(request):
     return HttpResponse(open(to_num + ".xml").read())
 
 
+@csrf_exempt
+def voice_call(request):
+    """
+    Return a xml with TwiML instructions for a Twilio call without gather.
+    The xml is look up in the database for the table and id specified in
+    the request. All incoming calls to twilio numbers create a request to this method.
+
+    Args:
+        request (HttpRequest): table and is params have to be at query request.
+        At the Post body To need to be a param
+
+    Returns:
+        HttpResponse: if there wasnt any error it return a xml with twiml instruction for twilio
+
+    Notes:
+        1. Author: Glorimar Castro-Noriega
+        2. Date: 3-5-19
+    """
+
+    parameters = {}
+    response = None
+
+    # get and validate parameters, also handle any error
+    parameters = voice_helpers.extract_parameters(request)
+    if parameters['error'] is False:
+        # get xml from db if id exist in table if not return error
+        pass
+    else:
+        response = HttpResponse(parameters['message'], status=parameters['status'])
+    return response
