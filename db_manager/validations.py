@@ -3,8 +3,16 @@ sys.path.insert(0, '../../')
 import re
 from db_manager import db_errors
 
-ALLOWED_TABLE_VALUES = {'company': r"^\d{9}$", 'department': r"^\d+$", 'site_dba': r"^\d{7}-\d{4}$"}
-
+ALLOWED_TABLE_VALUES = {'company': r"^\d{9}$", 'department': r"^\d+$",
+                        'site_dba': r"^\d{7}-\d{4}$",
+                        'company_phone': r"^\d{9}$", 'department_phone': r"^\d+$",
+                        'site_dba_phone': r"^\d{7}-\d{4}$"
+                        }
+ID_NAMES = {'company': 'ein', 'department': 'd_id',
+            'site_dba': 'reg_comer',
+            'company_phone': 'ein',
+            'site_dba_phone': 'reg_comer'
+            }
 
 def validate_id_table(id=None, table_name=None):
     """

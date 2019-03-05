@@ -234,6 +234,12 @@ def callUmbrellaCo(request):
     return HttpResponse(open(to_num + ".xml").read())
 
 
+"""
+------------------------------------------------------------------------------
+VOICE CALL HIERARCHY HANDLERS                    VOICE CALL HIERARCHY HANDLERS
+------------------------------------------------------------------------------
+"""
+
 @csrf_exempt
 def voice_call(request):
     """
@@ -259,8 +265,18 @@ def voice_call(request):
     # get and validate parameters, also handle any error
     parameters = voice_helpers.extract_parameters(request)
     if parameters['error'] is False:
+        # todo get and return xml
         # get xml from db if id exist in table if not return error
         pass
     else:
         response = HttpResponse(parameters['message'], status=parameters['status'])
     return response
+
+
+def redirect_call(phone=None):
+    if phone is None:
+        #return an error
+        pass
+    else:
+        return
+
