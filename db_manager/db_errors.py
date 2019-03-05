@@ -17,6 +17,7 @@ class DBError(Exception):
 
 
 class ArgsCantBeNone(DBError):
+    messega = None
     def __init__(self, funct_name=None, *args):
         """
         Exception to be raise when an argument value was expected but instead None was set
@@ -29,13 +30,13 @@ class ArgsCantBeNone(DBError):
         """
         if funct_name is None:
             funct_name = "unknown function at db manager"
-        message = "The following arguments can't be None: "
+        self.message = "The following arguments can't be None: "
         for arg in args:
-            message += arg + ", "
+            self.message += arg + ", "
 
-        message = message[:-2] + ' at %s() function' % funct_name
+        self.message = self.message[:-2] + ' at %s() function' % funct_name
 
-        super(ArgsCantBeNone, self).__init__(message)
+        super(ArgsCantBeNone, self).__init__(self.message)
 
 
 class InvalidArgValue(DBError):
