@@ -148,19 +148,20 @@ def voice_call(request):
 
     # get and validate parameters, also handle any error
     parameters = voice_helpers.extract_parameters(request)
+
     if parameters['error'] is False:
         # get xml from db if id exist in table if not return error
         twiml_xml = db_getters.get_twiml_xml(parameters['id'], table=parameters['table'],
                                              phone=parameters['phone'], gather=parameters['gather'])
-        print(twiml_xml)
+
+        # set HttpResponse
         if twiml_xml['error'] is True:
             response = HttpResponse(twiml_xml['messege'], status=twiml_xml['status'])
         else:
-            print(twiml_xml['twiml_xml'])
             response = HttpResponse(twiml_xml['twiml_xml'])
     else:
-        print(3)
         response = HttpResponse(parameters['messege'], status=parameters['status'])
+
     print(response)
     return response
 
