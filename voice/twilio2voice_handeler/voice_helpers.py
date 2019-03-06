@@ -12,17 +12,17 @@ def extract_parameters(request):
         request (HttpResponse): request object to a voice url
 
     Returns:
-        dict: {'id': str, 'table': str, 'phone': str,
+        dict: {'id': str, 'table': str, 'phone': str, 'gather': int
               'error': bool, 'status': int,
               'message': str}
 
     Notes:
         1. request method has to be a post method not a get
         2. Extrae phone, id and table. The phone is at the Post Body but the id and table have to be at the query parameters.
-
+        3. gather is optional
     """
     #request = HttpRequest (request)
-    result = {'id': None, 'table': None, 'phone': None,
+    result = {'id': None, 'table': None, 'phone': None, 'gather': None,
               'error': False, 'status': None,
               'message': None}
 
@@ -32,11 +32,19 @@ def extract_parameters(request):
         # verify id and table are at query params and To at post body
         get_keys = request.GET.keys()
         if 'id' in get_keys and 'table' in get_keys and gv.TO in request.POST.keys():
+            # set values
             result['id'] = request.GET.get('id')
             result['table'] = request.GET.get('table')
-            result['phone'] = request.POST.get('To')
+            result['phone'] = request.POST.get(gv.TO)
+            result['gather'] = request.POST.get(gv.SELECTION)
+
             # validate id-table relationship
-            validate_result = db_v.validate_id_table(result['id'], result['table'])
+            if result['gather'] is None:
+                validate_result = db_v.validate_id_table(result['id'], result['table'])
+            else:
+                validate_result = db_v.validate_gather_id_table(id=result['id'],
+                                                                table_name=result['table'],
+                                                                gather=result['gather'])
             if not validate_result['isValid']:
                 result['error'] = True
                 result['status'] = 400
@@ -45,8 +53,8 @@ def extract_parameters(request):
                 result['error'] = True
                 result['status'] = validate_result['status']
                 result['message'] = validate_result['error']
-            # return values
         else:
+            # return missing value
             result['error'] = True
             result['status'] = 400
             result['message'] = 'Parameters id, table and To are required. id and table are query parameters. To is a body parameter.'

@@ -20,13 +20,9 @@ from voice import views
 urlpatterns = [
     path('lobby', views.incall_lobby),
     path('lobby/', views.incall_lobby), #path completo voice/lobby
-    path('department/', views.incall_department),
-    path('department', views.incall_department),
-    path('sip_redirect', views.sip_redirect),
-    path('enqueue_call/<str:workspace>/<str:workflow>/<str:task_attributes>', views.enqueue_call),
     path('', views.index),
-    path('hold', views.hold_xml),
-    path('umbrellacompany', views.callUmbrellaCo)
+    path('umbrellacompany', views.callUmbrellaCo),
+    path('voice_call', views.voice_call)
 
 
 ]

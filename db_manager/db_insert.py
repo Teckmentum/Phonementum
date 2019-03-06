@@ -1,5 +1,6 @@
 import psycopg2
 import global_settings as gv
+"""
 def insertPhone(county_code, area_code, subscriber_num, foward = None, twiml_xml = None):
 
     insert_sql = "insert into phonementum.phone(phone, county_code, area_code, subscriber_num) values (%d%d%d, %d, %d, %d)" % (county_code, area_code, subscriber_num, county_code, area_code, subscriber_num)
@@ -19,10 +20,18 @@ def insertPhone(county_code, area_code, subscriber_num, foward = None, twiml_xml
     conn.commit()
     cur.close()
     conn.close()
+"""
+
 
 
 def connect2django():
-    return psycopg2.connect(host= gv.postgres_host, database=gv.postgres_database, user=gv.postgres_user, password=gv.postgres_password)
+    conn = psycopg2.connect(host= gv.postgres_host,
+                            database=gv.postgres_database,
+                            user=gv.postgres_user,
+                            password=gv.postgres_password)
+    cur = conn.cursor()
+
+    return conn, cur
 
 #insertPhone(1, 787, 2459899)
 #end of file
