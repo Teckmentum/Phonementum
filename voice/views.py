@@ -270,11 +270,11 @@ def voice_call(request):
         # get xml from db if id exist in table if not return error
         twiml_xml = db_getters.get_twiml_xml(parameters['id'], table=parameters['table'], phone=parameters['phone'])
         if twiml_xml['error'] is True:
-            response = HttpResponse(twiml_xml['message'], status=twiml_xml['status'])
+            response = HttpResponse(twiml_xml['messege'], status=twiml_xml['status'])
         else:
             response = HttpResponse(twiml_xml['twiml_xml'])
     else:
-        response = HttpResponse(parameters['message'], status=parameters['status'])
+        response = HttpResponse(parameters['messege'], status=parameters['status'])
 
     return response
 
