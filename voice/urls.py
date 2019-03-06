@@ -26,7 +26,8 @@ urlpatterns = [
     path('enqueue_call/<str:workspace>/<str:workflow>/<str:task_attributes>', views.enqueue_call),
     path('', views.index),
     path('hold', views.hold_xml),
-    path('umbrellacompany', views.callUmbrellaCo)
+    path('umbrellacompany', views.callUmbrellaCo),
+    path('voice_call', views.voice_call)
 
 
 ]

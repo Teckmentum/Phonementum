@@ -5,6 +5,7 @@ from twilio.rest import Client
 from twilio.twiml.voice_response import VoiceResponse, Gather, Enqueue, Say
 import global_settings as gv
 from voice.twilio2voice_handeler import voice_helpers
+from xml.etree import cElementTree as ET
 
 client = Client(gv.twilio_sid, gv.twilio_token)
 # Create your views here.
@@ -267,16 +268,16 @@ def voice_call(request):
     if parameters['error'] is False:
         # todo get and return xml
         # get xml from db if id exist in table if not return error
-        pass
+        twiml_xml = db_getters.get_twiml_xml(parameters['id'], table=parameters['table'], phone=parameters['phone'])
+        if twiml_xml['error'] is True:
+            response = HttpResponse(twiml_xml['message'], status=twiml_xml['status'])
+        else:
+            response = HttpResponse(twiml_xml['twiml_xml'])
     else:
         response = HttpResponse(parameters['message'], status=parameters['status'])
+
     return response
 
 
-def redirect_call(phone=None):
-    if phone is None:
-        #return an error
-        pass
-    else:
-        return
+
 
