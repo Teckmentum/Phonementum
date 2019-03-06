@@ -39,8 +39,12 @@ def extract_parameters(request):
             result['gather'] = request.POST.get(gv.SELECTION)
 
             # validate id-table relationship
-            validate_result = db_v.validate_id_table(result['id'], result['table'],
-                                                     result['gather'])
+            if result['gather'] is None:
+                validate_result = db_v.validate_id_table(result['id'], result['table'])
+            else:
+                validate_result = db_v.validate_gather_id_table(id=result['id'],
+                                                                table_name=result['table'],
+                                                                gather=result['gather'])
             if not validate_result['isValid']:
                 result['error'] = True
                 result['status'] = 400

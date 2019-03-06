@@ -151,7 +151,7 @@ def voice_call(request):
     if parameters['error'] is False:
         # get xml from db if id exist in table if not return error
         twiml_xml = db_getters.get_twiml_xml(parameters['id'], table=parameters['table'],
-                                             phone=parameters['phone'])
+                                             phone=parameters['phone'], gather=parameters['gather'])
         print(twiml_xml)
         if twiml_xml['error'] is True:
             response = HttpResponse(twiml_xml['messege'], status=twiml_xml['status'])
