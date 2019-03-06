@@ -49,6 +49,7 @@ def validate_id_table(id=None, table_name=None):
     if id is None or table_name is None:
         result['error'] = db_errors.ArgsCantBeNone("validate_id_table", "id", "table").message
         result['status'] = 400
+
     # verify is table_name is valid and if id correspond to a primary key in table_name
     if table_name not in ALLOWED_TABLE_VALUES.keys():
         result['error'] = db_errors.InvalidArgValue(table_name, *ALLOWED_TABLE_VALUES.keys()).message

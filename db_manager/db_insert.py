@@ -1,5 +1,6 @@
 import psycopg2
 import global_settings as gv
+
 """
 def insertPhone(county_code, area_code, subscriber_num, foward = None, twiml_xml = None):
 
@@ -20,18 +21,8 @@ def insertPhone(county_code, area_code, subscriber_num, foward = None, twiml_xml
     conn.commit()
     cur.close()
     conn.close()
+
 """
-
-
-
-def connect2django():
-    conn = psycopg2.connect(host= gv.postgres_host,
-                            database=gv.postgres_database,
-                            user=gv.postgres_user,
-                            password=gv.postgres_password)
-    cur = conn.cursor()
-
-    return conn, cur
 
 #insertPhone(1, 787, 2459899)
 #end of file

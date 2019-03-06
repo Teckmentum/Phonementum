@@ -71,9 +71,9 @@ def get_twiml_xml(id=None, table=None, phone=None, gather=None):
         result['twiml_xml'] = result['twiml_xml'][0]  # fetchone return a tuple here we are selecting the real value
 
     print(result)
-    #print(ET.tostring(result['twiml_xml'][0], encoding='utf8', method='xml'))
+    # print(ET.tostring(result['twiml_xml'][0], encoding='utf8', method='xml'))
 
     return result
 
 
-#get_twiml_xml(id='660902047', table='company_options', gather='1')
+get_twiml_xml(id='660902047', table='company_options', gather='1')
