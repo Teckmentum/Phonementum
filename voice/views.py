@@ -276,7 +276,7 @@ def voice_call(request):
             response = HttpResponse(twiml_xml['messege'], status=twiml_xml['status'])
         else:
             print(5)
-            response = HttpResponse(twiml_xml['twiml_xml'][0])
+            response = HttpResponse(ET.tostring(response['twiml_xml'][0], encoding='utf8', method='xml'))
     else:
         print(3)
         response = HttpResponse(parameters['messege'], status=parameters['status'])
