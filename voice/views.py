@@ -273,8 +273,8 @@ def voice_call(request):
         if twiml_xml['error'] is True:
             response = HttpResponse(twiml_xml['messege'], status=twiml_xml['status'])
         else:
-            print(response['twiml_xml'])
-            response = HttpResponse(response['twiml_xml'])
+            print(twiml_xml['twiml_xml'])
+            response = HttpResponse(twiml_xml['twiml_xml'])
     else:
         print(3)
         response = HttpResponse(parameters['messege'], status=parameters['status'])
