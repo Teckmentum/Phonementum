@@ -271,9 +271,11 @@ def voice_call(request):
         # todo get and return xml
         # get xml from db if id exist in table if not return error
         twiml_xml = db_getters.get_twiml_xml(parameters['id'], table=parameters['table'], phone=parameters['phone'])
+        print(twiml_xml)
         if twiml_xml['error'] is True:
             response = HttpResponse(twiml_xml['messege'], status=twiml_xml['status'])
         else:
+            print(5)
             response = HttpResponse(twiml_xml['twiml_xml'])
     else:
         print(3)
