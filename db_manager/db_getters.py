@@ -19,7 +19,8 @@ import xml.dom.minidom as xmldom
 def cast_xml(value, cur):
     if value is None:
         return None
-    return ET.fromstring(value)
+    #return ET.fromstring(value)
+    return value
 
 
 register_type(new_type((142,), "XML", cast_xml))
@@ -59,6 +60,7 @@ def get_twiml_xml(id=None, table=None, phone=None):
 
             cur.execute(query)
             result['twiml_xml'] = cur.fetchone()
+            result['twiml_xml'] = result['twiml_xml'][0]
             connect.close_db_connection(cur=cur, conn=conn) # todo manejar errores en la coneccion del db
         else:
             result['error'] = True
