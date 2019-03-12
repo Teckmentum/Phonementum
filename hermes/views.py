@@ -37,6 +37,7 @@ def incoming_voice_call_gather(request):
     taskID = parameters[gv.ENTITY_ID] + gv.TASK_GATHER
     if parameters[gv.CALL_SID] not in HERMES_SESSION.keys():
         HERMES_SESSION[parameters[gv.CALL_SID]] = {}
+
     if taskID not in HERMES_SESSION.get(parameters[gv.CALL_SID]).keys():
         # include gather task at session
         HERMES_SESSION[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters['entity_id'])

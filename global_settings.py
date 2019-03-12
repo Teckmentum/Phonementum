@@ -31,7 +31,7 @@ FROM        = "From"
 SELECTION   = "Digits"
 ID          = 'id'
 TABLE_NAME  = 'table_name'
-CALL_SID    = 'callSID'
+CALL_SID    = 'CallSid'
 
 """
 TASK NAMES
