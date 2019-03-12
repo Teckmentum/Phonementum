@@ -20,6 +20,7 @@ class MissingParameterAtRequest(HermesError):
 
     def __init__(self, *args):
         self.message = 'Hermes is missing a parameter at request.'
+        # todo change this verification, use length instead of None
         if args is not None:
             self.message += " The following argument(s) is(are) missing: "
         for arg in args:

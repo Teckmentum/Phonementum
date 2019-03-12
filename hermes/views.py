@@ -27,6 +27,7 @@ def greetings(request):
 
 @csrf_exempt
 def incoming_voice_call_gather(request):
+    # get parameters
     parameters = get_and_validate_parameters(request, gv.CALL_SID, gv.SELECTION)
 
     # verify for get_and_validate_parameters errtors
