@@ -17,7 +17,8 @@ class DBError(Exception):
 
 
 class ArgsCantBeNone(DBError):
-    messega = None
+    message = None
+
     def __init__(self, funct_name=None, *args):
         """
         Exception to be raise when an argument value was expected but instead None was set
@@ -58,3 +59,23 @@ class InvalidArgValue(DBError):
         self.message = self.message[:-2] + "."
 
         super(InvalidArgValue, self).__init__(self.message)
+
+
+class ValueNotFound(DBError):
+    message = None
+
+    def __init__(self, value_looked=None, id=None, table_name=None):
+        """
+        Exception to be raise if a value is not found for the id given at the table looked
+        Args:
+            id ():
+            table_name ():
+            value_looked (str):
+
+        Notes:
+            Author: Glorimar Castro-Noriega
+            Date: 3-11-19
+        """
+        self.message = 'There wasnt any %s at %s for %s PK' % (value_looked, table_name, id)
+
+        super(ValueNotFound, self).__init__(self.message)

@@ -25,4 +25,5 @@ def connect2django():
                             password=gv.postgres_password)
     cur = conn.cursor()
 
-    return conn, cur
+    result = {'conn': conn, 'cur': cur, 'error': False}
+    return result

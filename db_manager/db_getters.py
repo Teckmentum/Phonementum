@@ -11,69 +11,93 @@ import xml.dom.minidom as xmldom
 
 # this methods are to cast xml data from postgres to python xml object
 
-
-def get_lobby_xml(to_number):
-    #por el momento lo que hace es leer el xml en el directorio Fake_DB
-    #return os.getcwd() + "\\Fake_DB\\" + to_number + ".xml"
-    return to_number + ".xml"
-
-
-def get_department_xml(to_number, department):
-    return to_number + "_dept_" + department + ".xml"
-
-
-def get_twiml_xml(id=None, table=None, phone=None, gather=None):
+def get_values_from_hermes(get_values_id, table_name, column):
     """
-
+    Get from the specified table at schema hermes the value of column where the Pk is get_values_id
     Args:
-        id (): primary key of the table to connect
-        table (str): table name to connect at the db
-        phone (str): complete phone number without + sign
+        get_values_id (str): PK at table_name
+        table_name (str): name of the table to extract a value
+        column (str): A specific column at table_name
 
     Returns:
-        dict: {'isValid': bool, 'error': str, 'status': int, 'twiml_xml': str}
+        dic: if an error was rise the dic contain 'error' and 'message' if not is contain 'error' and column
 
     Notes:
         1. Author: Glorimar Castro-Noriega
-        2. Date: 3-5-19
     """
+    result = {'error': False}
 
-    # validate id and table param, also gather is it is passed
-    if gather is None:
-        result = validations.validate_id_table(id=id, table_name=table)
-    else:
-        result = validations.validate_gather_id_table(id=id, table_name=table, gather=gather)
+    # verify param values arent null
+    if get_values_id is None or table_name is None or column is None:
+        return {'error': True, 'message': db_errors.ArgsCantBeNone('get_values_from_hermes', 'id', 'table_name', 'column').message}
 
-    if result['error'] is None and result['isValid']:
-        # validate phone param
-        if gather is None and phone is None:
-            result['error'] = True
-            result['messege'] = db_errors.ArgsCantBeNone('get_twiml_xml', 'id', 'table', 'phone or gather').message
-        else:
-            query_option = "gather = '%s'" % gather if gather is not None else "phone = '%s'" % phone.replace("+", "")
-            query = "SELECT twiml_xml FROM phonementum.%s " \
-                    "where %s = '%s' and %s" % (table, validations.ID_NAMES[table],
-                                                id, query_option)
-            conn, cur = connect.connect2django()
+    # connect to db
+    get_values_temp = connect.connect2django()
 
-            cur.execute(query)
-            result['twiml_xml'] = cur.fetchone()
-            connect.close_db_connection(cur=cur, conn=conn)  # todo manejar errores en la coneccion del db
+    if get_values_temp['error'] is True:
+        return get_values_temp
 
-            # look at db
+    # verify table name is valid
+    if table_name not in validations.ALLOWED_TABLE_VALUES.keys():
+        return {'error': True, 'message': db_errors.DBError('%s is not a valid table name' % table_name)}
 
-    # if twiml_xml is None element was not found
-    if result['twiml_xml'] is None:
-        result['error'] = True
-        result['messege'] = "An element for the given id at the given table was not found"
-        result['status'] = 400
-    else:
-        result['twiml_xml'] = result['twiml_xml'][0]  # fetchone return a tuple here we are selecting the real value
+    # get value from db
+    query = "select %s from hermes.%s where %s = '%s'" % (column, table_name,
+                                                        validations.ID_NAMES[table_name], get_values_id)
+    try:
+        get_values_temp['cur'].execute(query)
+        result[column] = get_values_temp['cur'].fetchone()
+    except:
+        return {'error': True, 'message': db_errors.DBError(message='An un expected error has ocurre at get_values_from_hermes')}
+    finally:
+        connect.close_db_connection(conn=get_values_temp['conn'], cur=get_values_temp['cur'])
 
-    print(result)
-    # print(ET.tostring(result['twiml_xml'][0], encoding='utf8', method='xml'))
+    # verify that a value was found
+    if result[column] is None:
+        return {'error': True, 'message': db_errors.ValueNotFound(table_name=table_name, id=get_values_id, value_looked=column)}
 
+    # set real result since fetchone return a tuple
+    result[column] = result[column][0]
     return result
 
 
-get_twiml_xml(id='660902047', table='company_options', gather='1')
+def get_twiml_xml(get_twiml_id=None, get_twiml_table_name=None):
+    """
+    Return the valuo at the column twiml_xml from the specified table_name where the pk is get_twiml_id
+    Args:
+        get_twiml_id (str):
+        get_twiml_table_name (str):
+
+    Returns:
+        dic: if an error was rise the dic contain 'error' and 'message' if not is contain 'error' and column
+
+    Notes:
+        1. Author: Glorimar Castro-Noriega
+    """
+    # verify inputs are not None
+    if get_twiml_id is None or get_twiml_table_name is None:
+        return {'error': True, 'message': db_errors.ArgsCantBeNone('get_twiml_id', 'get_twiml_id', 'get_twiml_table_name')}
+
+    return get_values_from_hermes(get_values_id=get_twiml_id, table_name=get_twiml_table_name,
+                                            column='twiml_xml')
+
+
+def get_task(id_value, task_name) -> dict:
+    """
+
+    Args:
+        id_value (): 
+        task_name (): 
+
+    Returns:
+        dict: 
+
+    """
+    if id_value is None or task_name is None:
+        return {'error': True,
+                'message': db_errors.ArgsCantBeNone('id_value', 'task_name')}
+
+    # get task from hermes.task table
+    return get_values_from_hermes(get_values_id=id_value + task_name, table_name='task', column='var_values')
+
+
