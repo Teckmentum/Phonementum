@@ -11,10 +11,11 @@ import xml.dom.minidom as xmldom
 
 # this methods are to cast xml data from postgres to python xml object
 
-def get_values_from_hermes(get_values_id, table_name, column):
+def get_values_from_hermes(get_values_id=None, table_name=None, column=None, compound_id=None):
     """
     Get from the specified table at schema hermes the value of column where the Pk is get_values_id
     Args:
+        compound_id (str): para PK compuestos
         get_values_id (str): PK at table_name
         table_name (str): name of the table to extract a value
         column (str): A specific column at table_name
@@ -28,7 +29,7 @@ def get_values_from_hermes(get_values_id, table_name, column):
     result = {'error': False}
 
     # verify param values arent null
-    if get_values_id is None or table_name is None or column is None:
+    if (get_values_id is None and compound_id is None) or table_name is None or column is None:
         return {'error': True, 'message': db_errors.ArgsCantBeNone('get_values_from_hermes', 'id', 'table_name', 'column').message}
 
     # connect to db
@@ -42,8 +43,19 @@ def get_values_from_hermes(get_values_id, table_name, column):
         return {'error': True, 'message': db_errors.DBError('%s is not a valid table name' % table_name)}
 
     # get value from db
-    query = "select %s from hermes.%s where %s = '%s'" % (column, table_name,
+    if get_values_id is not None:
+        query = "select %s from hermes.%s where %s = '%s'" % (column, table_name,
                                                         validations.ID_NAMES[table_name], get_values_id)
+    else:
+        temp_id = compound_id[1:-1].split(',')
+        id_for_query = '('
+        for elements in temp_id:
+            id_for_query += "'" + elements.strip() + "', "
+        id_for_query = id_for_query[:-2] + ")"
+        query = "select %s from hermes.%s where %s = %s" % (column, table_name,
+                                                              validations.ID_NAMES[table_name], id_for_query)
+
+    print(query)
     try:
         get_values_temp['cur'].execute(query)
         result[column] = get_values_temp['cur'].fetchone()
@@ -61,7 +73,7 @@ def get_values_from_hermes(get_values_id, table_name, column):
     return result
 
 
-def get_twiml_xml(get_twiml_id=None, get_twiml_table_name=None):
+def get_twiml_xml(get_twiml_id=None, compound_id=None, get_twiml_table_name=None):
     """
     Return the valuo at the column twiml_xml from the specified table_name where the pk is get_twiml_id
     Args:
@@ -75,19 +87,23 @@ def get_twiml_xml(get_twiml_id=None, get_twiml_table_name=None):
         1. Author: Glorimar Castro-Noriega
     """
     # verify inputs are not None
-    if get_twiml_id is None or get_twiml_table_name is None:
-        return {'error': True, 'message': db_errors.ArgsCantBeNone('get_twiml_id', 'get_twiml_id', 'get_twiml_table_name')}
+    if (get_twiml_id is None and compound_id is None) or get_twiml_table_name is None:
+        return {'error': True, 'message': db_errors.ArgsCantBeNone('get_twiml_id', 'compound_id', 'get_twiml_id', 'get_twiml_table_name')}
 
-    return get_values_from_hermes(get_values_id=get_twiml_id, table_name=get_twiml_table_name,
+    if get_twiml_id is not None:
+        return get_values_from_hermes(get_values_id=get_twiml_id, table_name=get_twiml_table_name,
                                             column='twiml_xml')
+    else:
+        return get_values_from_hermes(compound_id=compound_id, table_name=get_twiml_table_name,
+                                      column='twiml_xml')
 
 
 def get_task(id_value, task_name) -> dict:
     """
 
     Args:
-        id_value (): 
-        task_name (): 
+        id_value (str):
+        task_name (str):
 
     Returns:
         dict: 

@@ -29,6 +29,17 @@ TWILIO BODY PARAMETERS
 TO          = "To"
 FROM        = "From"
 SELECTION   = "Digits"
+ID          = 'id'
+TABLE_NAME  = 'table_name'
+CALL_SID    = 'callSID'
+
+"""
+TASK NAMES
+"""
+TASK_GATHER = 'gather'
+
+ENTITY_ID = 'entity_id'
+
 
 
 """
