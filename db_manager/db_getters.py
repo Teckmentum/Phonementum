@@ -75,7 +75,8 @@ def get_values_from_hermes(get_values_id=None, table_name=None, column=None, com
 
 def get_twiml_xml(get_twiml_id=None, compound_id=None, get_twiml_table_name=None):
     """
-    Return the valuo at the column twiml_xml from the specified table_name where the pk is get_twiml_id
+    Return the valuo at the column twiml_xml from the specified table_name where the pk is get_twiml_id.
+    If the table use a two pk then compound_id should be use
     Args:
         get_twiml_id (str):
         get_twiml_table_name (str):

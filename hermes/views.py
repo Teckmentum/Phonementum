@@ -24,13 +24,62 @@ def greetings(request):
     """
     return HttpResponse("Saludos mi nombre es Hermes y soy el IVR de Teckmentum")
 
+@csrf_exempt
+def incoming_voice_call_lobby(request):
+    """
+    This method extract from _phone table the twiml_xml value. To work it need
+    entity_name, id, callsid and To. Callsid and To los provee twilio pero
+    entity_name amd id tienen q estar en los query parameters
+    Args:
+        request ():
+
+    Returns:
+
+    """
+
+    # get parameters if a parameter is missing return an error
+    parameters = get_parameters(request, gv.CALL_SID, gv.ENTITY_NAME)
+    if parameters[gv.ERROR]:
+        return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
+
+    # validate relationship between entity and id
+    validation = validate_entity_id_relationship(parameters[gv.ENTITY_NAME], parameters[gv.ID])
+    if validation[gv.ERROR] or not validation['isValid']:
+        return HttpResponse(validation[gv.ERROR], status=validation['status'])
+
+    # get twiml_xml if error o no twiml was found reeturn error
+    compound_id = set_compound_id(entity_id=parameters[gv.ID], table_type_id=parameters[gv.TO])
+    twiml_xml = db_getters.get_twiml_xml(compound_id=compound_id, get_twiml_table_name=set_table_name(parameters[gv.ENTITY_NAME], 'phone'))
+    if twiml_xml['error']:
+        return HttpResponse(twiml_xml[gv.MESSAGE], status=500)
+    if twiml_xml['twiml_xml']:
+        return HttpResponse(twiml_xml[gv.MESSAGE], status=400)
+
+    # get twiml for after_lobby, table use is the entity table itself
+    twiml_xml_after_lobby = db_getters.get_twiml_xml(get_twiml_id=parameters[gv.ID],
+                                         get_twiml_table_name=parameters[gv.ENTITY_NAME])
+
+    # add twiml after lobby at hermes session
+    if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
+        add_callsid_to_session(call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
+
+    return HttpResponse(twiml_xml['twiml_xml'], status=200)
+
 
 @csrf_exempt
 def incoming_voice_call_gather(request):
-    # get parameters
-    parameters = get_and_validate_parameters(request, gv.CALL_SID, gv.SELECTION)
+    """
+    This method get an twiml_xml from an option table and return it.
+    Args:
+        request ():
 
-    # verify for get_and_validate_parameters errtors
+    Returns:
+
+    """
+    # get parameters
+    parameters = get_parameters(request, gv.CALL_SID, gv.SELECTION, gv.TABLE_NAME)
+
+    # verify for get_and_validate_parameters errors
     if parameters['error'] or parameters['isValid'] is False:
         return HttpResponse(parameters['message'], status=400)
 
@@ -77,7 +126,21 @@ def incoming_voice_call_gather(request):
     return HttpResponse(twiml_xml['twiml_xml'])
 
 
-def get_and_validate_parameters(request, *args):
+
+"""
+
+"""
+def get_parameters(request, *args):
+    """
+    Extrae por default id and To from an HttpRequest. Fuera de eso extrae to_do
+    los parametros que se le pidan. Si uno de esos parametros  no es encontrado se devuelve un error
+    Args:
+        request ():
+        *args ():
+
+    Returns:
+
+    """
     # request = HttpRequest(request)
 
     # get default parameters
@@ -94,25 +157,80 @@ def get_and_validate_parameters(request, *args):
     if None in result.values():
         return {'error': True, 'message': herror.MissingParameterAtRequest()}
 
-    #verify if composite primary key, esto toma en cuenta que el id en el query solo representa un company, department or site_dba
-    if '_options' in result[gv.TABLE_NAME] and gv.SELECTION in result.keys():
-        result[gv.ENTITY_ID] = result[gv.ID]
-        result[gv.ID] = '(%s, %s)' % (result[gv.SELECTION], result[gv.ID])
-    elif '_phone' in result[gv.TABLE_NAME]:
-        result[gv.ENTITY_ID] = result[gv.ID]
-        result[gv.ID] = '(%s, %s)' % (result[gv.TO], result[gv.ID])
-    val_result = db_validation.validate_id_table_relationship(id=result[gv.ID], table_name=result[gv.TABLE_NAME])
+    return result
+
+
+def validate_entity_id_relationship(table_name=None, _id=None):
+    """
+
+    Args:
+        table_name ():
+        _id ():
+
+    Returns:
+
+    """
+    result = set_result()
+    # verify that a value was passed
+    if table_name is None or _id is None:
+        result[gv.ERROR: herror.MissingParameterAtRequest('entity_name', 'id').message]
+        result['status'] = 500
+        return result
+
+    val_result = db_validation.validate_id_table_relationship(id=_id, table_name=table_name)
 
     # verify errors in validate relationship
     if val_result['error'] is True:
-        return val_result
+        return set_result(val_result[gv.MESSAGE], True, 400)
 
     # verify if not valid
     if val_result['isValid'] is False:
-        return {'error': True, 'message': 'Relationship between %s and %s is not valid' % (result[gv.ID], result[gv.TABLE_NAME])}
+        result = set_result('Relationship between %s and %s is not valid' % (_id, table_name), True, 400)
+        result['isValid'] = False
+        return result
 
     # return values
     result['isValid'] = val_result['isValid']
     return result
+
+
+def set_result(message=None, error=None, status=200, twiml_xml=None):
+    """
+    This method is just to ensure to always give as a result a dictionary with
+    message, error, status, twiml_xml
+    Args:
+        message ():
+        error ():
+        status ():
+        twiml_xml ():
+
+    Returns:
+        dict: dictionary {mesage, error, status, twiml_xml}
+
+    """
+    result = {gv.ERROR: error, gv.MESSAGE: message, 'status':status, 'twiml_xml':twiml_xml}
+    return result
+
+
+def set_table_name(entity_name, table_type):
+    return entity_name + "_" + table_type
+
+
+def set_compound_id(entity_id, table_type_id):
+    return '(%s, %s)' % (table_type_id, entity_id)
+
+
+def add_callsid_to_session(call_sid, id, value):
+    """
+    Add a key, value to HERMES_SESSION for call_sid
+    Args:
+        call_sid ():
+        id ():
+        value ():
+
+    Returns:
+
+    """
+    HERMES_SESSION[call_sid][id] = value
 
 

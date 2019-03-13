@@ -42,7 +42,7 @@ def validate_id_table_relationship(id=None, table_name=None):
         id (str): Represent PrimaryKey for the specified table
         table_name (str): the table name from which id is going to be selected
     Returns:
-        dict: {'isValid': bool, 'error': str, 'status': int}
+        dict: {'isValid': bool, 'error': str, 'message': str}
     Notes:
         1. Author: Glorimar Castro-Noriega
         2. Date: 3-3-19
