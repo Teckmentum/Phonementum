@@ -64,6 +64,7 @@ def incoming_voice_call_lobby(request):
                                          get_twiml_table_name=parameters[gv.ENTITY_NAME])
 
     # add twiml after lobby at hermes session
+    print(twiml_xml_after_lobby)
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
         add_callsid_to_session(call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
 
