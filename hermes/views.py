@@ -151,11 +151,15 @@ def incoming_voice_call_gather(request):
 """
 
 """
-def get_parameters(request, get_param=None, post_param=None):
+
+
+def get_parameters(request, get_param=[], post_param=[]):
     """
     Extrae por default id and To from an HttpRequest. Fuera de eso extrae to_do
     los parametros que se le pidan. Si uno de esos parametros  no es encontrado se devuelve un error
     Args:
+        get_param:
+        post_param:
         request ():
         *args ():
 
