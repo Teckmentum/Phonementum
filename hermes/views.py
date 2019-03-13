@@ -162,7 +162,12 @@ def get_parameters(request, get_param, post_param):
     if None in result.values():
         result[gv.ERROR]= True
         result['status']=400
-        result[gv.MESSAGE]= herror.MissingParameterAtRequest().message
+        get_param_temp = ""
+        for element in result.values():
+            if element is None:
+                get_param_temp += get_param_temp + ", "
+
+        result[gv.MESSAGE]= herror.MissingParameterAtRequest(get_param_temp[0:-2]).message
         return result
 
     return result
