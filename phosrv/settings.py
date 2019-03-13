@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# import django.conf.global_settings as gs
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -86,6 +88,13 @@ DATABASES = {
         'PORT': '5432'
     }
 }
+
+# Session
+"""
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+SESSION_FILE_PATH = "/tmp"
+"""
+
 
 
 # Password validation

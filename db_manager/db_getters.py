@@ -76,4 +76,4 @@ def get_twiml_xml(id=None, table=None, phone=None, gather=None):
     return result
 
 
-get_twiml_xml(id='660902047', table='company_options', gather='1')
+# get_twiml_xml(id='660902047', table='company_options', gather='1')
