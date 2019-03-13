@@ -40,19 +40,23 @@ def incoming_voice_call_lobby(request):
     # get parameters if a parameter is missing return an error
     parameters = get_parameters(request, gv.CALL_SID, gv.ENTITY_NAME)
     if parameters[gv.ERROR]:
+        print(parameters[gv.MESSAGE])
         return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
 
     # validate relationship between entity and id
     validation = validate_entity_id_relationship(parameters[gv.ENTITY_NAME], parameters[gv.ID])
     if validation[gv.ERROR] or not validation['isValid']:
-        return HttpResponse(validation[gv.ERROR], status=validation['status'])
+        print(validation[gv.MESSAGE])
+        return HttpResponse(validation[gv.MESSAGE], status=validation['status'])
 
     # get twiml_xml if error o no twiml was found reeturn error
     compound_id = set_compound_id(entity_id=parameters[gv.ID], table_type_id=parameters[gv.TO])
     twiml_xml = db_getters.get_twiml_xml(compound_id=compound_id, get_twiml_table_name=set_table_name(parameters[gv.ENTITY_NAME], 'phone'))
     if twiml_xml['error']:
+        print(twiml_xml[gv.MESSAGE])
         return HttpResponse(twiml_xml[gv.MESSAGE], status=500)
     if twiml_xml['twiml_xml']:
+        print(twiml_xml[gv.MESSAGE])
         return HttpResponse(twiml_xml[gv.MESSAGE], status=400)
 
     # get twiml for after_lobby, table use is the entity table itself
