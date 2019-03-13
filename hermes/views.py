@@ -74,7 +74,7 @@ def incoming_voice_call_lobby(request):
 def incoming_voice_call_from_lobby(request):
 
     # get parameters if one missing return error
-    parameters = get_parameters(request, post_param=[gv.CALL_SID])
+    parameters = get_parameters(request=request, post_param=[gv.CALL_SID])
     if parameters[gv.ERROR]:
         print(parameters[gv.MESSAGE])
         return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
