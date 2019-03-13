@@ -55,8 +55,8 @@ def incoming_voice_call_lobby(request):
     if twiml_xml['error']:
         print(twiml_xml[gv.MESSAGE])
         return HttpResponse(twiml_xml[gv.MESSAGE], status=500)
-    if twiml_xml['twiml_xml']:
-        print(twiml_xml[gv.MESSAGE])
+    if twiml_xml['twiml_xml'] is None:
+        print(twiml_xml)
         return HttpResponse(twiml_xml[gv.MESSAGE], status=400)
 
     # get twiml for after_lobby, table use is the entity table itself
