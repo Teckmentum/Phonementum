@@ -38,7 +38,7 @@ def incoming_voice_call_lobby(request):
     """
 
     # get parameters if a parameter is missing return an error
-    parameters = get_parameters(request, gv.CALL_SID, gv.ENTITY_NAME)
+    parameters = get_parameters(request, post_param=[gv.CALL_SID], get_param=[gv.ENTITY_NAME])
     if parameters[gv.ERROR]:
         print(parameters[gv.MESSAGE])
         return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
@@ -81,7 +81,7 @@ def incoming_voice_call_gather(request):
 
     """
     # get parameters
-    parameters = get_parameters(request, gv.CALL_SID, gv.SELECTION, gv.TABLE_NAME)
+    parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.TABLE_NAME])
 
     # verify for get_and_validate_parameters errors
     if parameters['error'] or parameters['isValid'] is False:
@@ -134,7 +134,7 @@ def incoming_voice_call_gather(request):
 """
 
 """
-def get_parameters(request, *args):
+def get_parameters(request, get_param, post_param):
     """
     Extrae por default id and To from an HttpRequest. Fuera de eso extrae to_do
     los parametros que se le pidan. Si uno de esos parametros  no es encontrado se devuelve un error
@@ -154,7 +154,9 @@ def get_parameters(request, *args):
     result[gv.TO] = request.POST.get(gv.TO)
 
     # get extra parameters
-    for element in args:
+    for element in post_param:
+        result[element] = request.POST.get(element)
+    for element in get_param:
         result[element] = request.POST.get(element)
 
     # verify for missing parameters
