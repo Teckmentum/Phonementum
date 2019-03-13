@@ -150,7 +150,6 @@ def get_parameters(request, get_param, post_param):
     # get default parameters
     result = {'error': False, 'isValid': False, 'status': 200}
     result[gv.ID] = request.GET.get(gv.ID)
-    result[gv.TABLE_NAME] = request.GET.get(gv.TABLE_NAME)
     result[gv.TO] = request.POST.get(gv.TO)
 
     # get extra parameters
@@ -161,7 +160,10 @@ def get_parameters(request, get_param, post_param):
 
     # verify for missing parameters
     if None in result.values():
-        return {'error': True, 'message': herror.MissingParameterAtRequest()}
+        result[gv.ERROR]= True
+        result['status']=400
+        result[gv.MESSAGE]= herror.MissingParameterAtRequest().message
+        return result
 
     return result
 
