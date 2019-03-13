@@ -150,7 +150,7 @@ def get_parameters(request, get_param, post_param):
     # get default parameters
     result = {'error': False, 'isValid': False, 'status': 200}
     result[gv.ID] = request.GET.get(gv.ID)
-    result[gv.TO] = request.POST.get(gv.TO)
+    result[gv.TO] = request.POST.get(gv.TO)[1:]
 
     # get extra parameters
     for element in post_param:
