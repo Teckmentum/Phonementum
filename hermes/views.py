@@ -148,7 +148,7 @@ def get_parameters(request, *args):
     # request = HttpRequest(request)
 
     # get default parameters
-    result = {'error': False, 'isValid': False}
+    result = {'error': False, 'isValid': False, 'status': 200}
     result[gv.ID] = request.GET.get(gv.ID)
     result[gv.TABLE_NAME] = request.GET.get(gv.TABLE_NAME)
     result[gv.TO] = request.POST.get(gv.TO)
