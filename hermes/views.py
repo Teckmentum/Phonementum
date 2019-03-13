@@ -38,7 +38,7 @@ def incoming_voice_call_lobby(request):
     """
 
     # get parameters if a parameter is missing return an error
-    parameters = get_parameters(request, gv.CALL_SID, gv.ENTITY_NAME)
+    parameters = get_parameters(request, post_param=[gv.CALL_SID], get_param=[gv.ENTITY_NAME])
     if parameters[gv.ERROR]:
         print(parameters[gv.MESSAGE])
         return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
@@ -55,8 +55,8 @@ def incoming_voice_call_lobby(request):
     if twiml_xml['error']:
         print(twiml_xml[gv.MESSAGE])
         return HttpResponse(twiml_xml[gv.MESSAGE], status=500)
-    if twiml_xml['twiml_xml']:
-        print(twiml_xml[gv.MESSAGE])
+    if twiml_xml['twiml_xml'] is None:
+        print(twiml_xml)
         return HttpResponse(twiml_xml[gv.MESSAGE], status=400)
 
     # get twiml for after_lobby, table use is the entity table itself
@@ -64,16 +64,41 @@ def incoming_voice_call_lobby(request):
                                          get_twiml_table_name=parameters[gv.ENTITY_NAME])
 
     # add twiml after lobby at hermes session
+    print(twiml_xml_after_lobby)
+    print('----------------------------------------------')
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
-        add_callsid_to_session(call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
+        print("entro a add hermes ssesion")
+        add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
+        print(request.session)
+
+
 
     return HttpResponse(twiml_xml['twiml_xml'], status=200)
 
 
 @csrf_exempt
+def incoming_voice_call_from_lobby(request):
+
+    # get parameters if one missing return error
+    parameters = get_parameters(request=request, post_param=[gv.CALL_SID])
+    if parameters[gv.ERROR]:
+        print(parameters[gv.MESSAGE])
+        return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
+
+    # get twiml from hermessession
+    if parameters[gv.CALL_SID] in HERMES_SESSION.keys() and gv.TWILIOML_AFTER_LOBBY in HERMES_SESSION[parameters[gv.CALL_SID]].keys():
+        return HttpResponse(HERMES_SESSION[parameters[gv.CALL_SID]][gv.TWILIOML_AFTER_LOBBY])
+    else:
+        print(parameters[gv.CALL_SID])
+        print(HERMES_SESSION)
+        return HttpResponse("For %s and twiml after lobby wasnt found" % (parameters[gv.CALL_SID]), status=400)
+
+
+
+@csrf_exempt
 def incoming_voice_call_gather(request):
     """
-    This method get an twiml_xml from an option table and return it.
+    This method get an twiml_xml from an option table and return it. Gather method work only on _options table at hermes db
     Args:
         request ():
 
@@ -81,7 +106,7 @@ def incoming_voice_call_gather(request):
 
     """
     # get parameters
-    parameters = get_parameters(request, gv.CALL_SID, gv.SELECTION, gv.TABLE_NAME)
+    parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME])
 
     # verify for get_and_validate_parameters errors
     if parameters['error'] or parameters['isValid'] is False:
@@ -134,11 +159,15 @@ def incoming_voice_call_gather(request):
 """
 
 """
-def get_parameters(request, *args):
+
+
+def get_parameters(request, get_param=[], post_param=[]):
     """
     Extrae por default id and To from an HttpRequest. Fuera de eso extrae to_do
     los parametros que se le pidan. Si uno de esos parametros  no es encontrado se devuelve un error
     Args:
+        get_param:
+        post_param:
         request ():
         *args ():
 
@@ -148,18 +177,28 @@ def get_parameters(request, *args):
     # request = HttpRequest(request)
 
     # get default parameters
-    result = {'error': False, 'isValid': False}
+    result = {'error': False, 'isValid': False, 'status': 200}
     result[gv.ID] = request.GET.get(gv.ID)
-    result[gv.TABLE_NAME] = request.GET.get(gv.TABLE_NAME)
-    result[gv.TO] = request.POST.get(gv.TO)
+    result[gv.TO] = request.POST.get(gv.TO)[1:]
 
     # get extra parameters
-    for element in args:
+    for element in post_param:
         result[element] = request.POST.get(element)
+    for element in get_param:
+        result[element] = request.GET.get(element)
 
     # verify for missing parameters
     if None in result.values():
-        return {'error': True, 'message': herror.MissingParameterAtRequest()}
+        result[gv.ERROR]= True
+        result['status']=400
+        get_param_temp = ""
+        print(result)
+        for element in result.values():
+            if element is None:
+                get_param_temp += get_param_temp + ", "
+
+        result[gv.MESSAGE]= herror.MissingParameterAtRequest(get_param_temp[0:-2]).message
+        return result
 
     return result
 
@@ -224,10 +263,11 @@ def set_compound_id(entity_id, table_type_id):
     return '(%s, %s)' % (table_type_id, entity_id)
 
 
-def add_callsid_to_session(call_sid, id, value):
+def add_callsid_to_session(request, call_sid, id, value):
     """
     Add a key, value to HERMES_SESSION for call_sid
     Args:
+        request:
         call_sid ():
         id ():
         value ():
@@ -235,6 +275,9 @@ def add_callsid_to_session(call_sid, id, value):
     Returns:
 
     """
-    HERMES_SESSION[call_sid][id] = value
+    if call_sid not in request.session.keys():
+        request.session[call_sid] = {}
+
+    request.session[call_sid][id] = value
 
 

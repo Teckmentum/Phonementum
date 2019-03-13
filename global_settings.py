@@ -7,6 +7,11 @@ Variables de token se deben inicializar aqui
 import os
 
 """
+Temp session
+"""
+session = {} # for a temp global session
+
+"""
 TWILIO VARIABLES
 """
 twilio_sid      = os.environ["twilio_sid"]
