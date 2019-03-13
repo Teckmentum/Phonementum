@@ -67,7 +67,9 @@ def incoming_voice_call_lobby(request):
     print(twiml_xml_after_lobby)
     print('----------------------------------------------')
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
+        print("entro a add hermes ssesion")
         add_callsid_to_session(call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
+        print(HERMES_SESSION)
 
     return HttpResponse(twiml_xml['twiml_xml'], status=200)
 
