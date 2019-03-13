@@ -68,8 +68,10 @@ def incoming_voice_call_lobby(request):
     print('----------------------------------------------')
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
         print("entro a add hermes ssesion")
-        add_callsid_to_session(call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
-        print(HERMES_SESSION)
+        add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
+        print(request.session)
+
+
 
     return HttpResponse(twiml_xml['twiml_xml'], status=200)
 
@@ -261,10 +263,11 @@ def set_compound_id(entity_id, table_type_id):
     return '(%s, %s)' % (table_type_id, entity_id)
 
 
-def add_callsid_to_session(call_sid, id, value):
+def add_callsid_to_session(request, call_sid, id, value):
     """
     Add a key, value to HERMES_SESSION for call_sid
     Args:
+        request:
         call_sid ():
         id ():
         value ():
@@ -272,8 +275,9 @@ def add_callsid_to_session(call_sid, id, value):
     Returns:
 
     """
-    if call_sid not in HERMES_SESSION.keys():
-        HERMES_SESSION[call_sid] = {}
-    HERMES_SESSION[call_sid][id] = value
+    if call_sid not in request.session.keys():
+        request.session[call_sid] = {}
+
+    request.session[call_sid][id] = value
 
 
