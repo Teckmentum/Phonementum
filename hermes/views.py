@@ -71,9 +71,26 @@ def incoming_voice_call_lobby(request):
 
 
 @csrf_exempt
+def incoming_voice_call_from_lobby(request):
+
+    # get parameters if one missing return error
+    parameters = get_parameters(request, post_param=[gv.CALL_SID])
+    if parameters[gv.ERROR]:
+        print(parameters[gv.MESSAGE])
+        return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
+
+    # get twiml from hermessession
+    if parameters[gv.CALL_SID] in HERMES_SESSION.keys() and gv.TWILIOML_AFTER_LOBBY in HERMES_SESSION[parameters[gv.CALL_SID]].keys():
+        return HttpResponse(HERMES_SESSION[parameters[gv.CALL_SID]][gv.TWILIOML_AFTER_LOBBY])
+    else:
+        return HttpResponse("For %s and twiml after lobby wasnt found", status=400)
+
+
+
+@csrf_exempt
 def incoming_voice_call_gather(request):
     """
-    This method get an twiml_xml from an option table and return it.
+    This method get an twiml_xml from an option table and return it. Gather method work only on _options table at hermes db
     Args:
         request ():
 
@@ -81,7 +98,7 @@ def incoming_voice_call_gather(request):
 
     """
     # get parameters
-    parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.TABLE_NAME])
+    parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME])
 
     # verify for get_and_validate_parameters errors
     if parameters['error'] or parameters['isValid'] is False:
