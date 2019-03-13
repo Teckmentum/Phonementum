@@ -83,7 +83,8 @@ def incoming_voice_call_from_lobby(request):
     if parameters[gv.CALL_SID] in HERMES_SESSION.keys() and gv.TWILIOML_AFTER_LOBBY in HERMES_SESSION[parameters[gv.CALL_SID]].keys():
         return HttpResponse(HERMES_SESSION[parameters[gv.CALL_SID]][gv.TWILIOML_AFTER_LOBBY])
     else:
-        return HttpResponse("For %s and twiml after lobby wasnt found", status=400)
+        print(parameters[gv.CALL_SID])
+        return HttpResponse("For %s and twiml after lobby wasnt found" % (parameters[gv.CALL_SID]), status=400)
 
 
 
