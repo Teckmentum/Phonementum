@@ -163,6 +163,7 @@ def get_parameters(request, get_param, post_param):
         result[gv.ERROR]= True
         result['status']=400
         get_param_temp = ""
+        print(result)
         for element in result.values():
             if element is None:
                 get_param_temp += get_param_temp + ", "
