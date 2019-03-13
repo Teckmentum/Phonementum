@@ -156,7 +156,7 @@ def get_parameters(request, get_param, post_param):
     for element in post_param:
         result[element] = request.POST.get(element)
     for element in get_param:
-        result[element] = request.POST.get(element)
+        result[element] = request.GET.get(element)
 
     # verify for missing parameters
     if None in result.values():
