@@ -34,7 +34,21 @@ TWILIO BODY PARAMETERS
 TO          = "To"
 FROM        = "From"
 SELECTION   = "Digits"
+ID          = 'id'
+TABLE_NAME  = 'table_name'
+CALL_SID    = 'CallSid'
+ENTITY_NAME = 'entity_name'
 
+TWILIOML_AFTER_LOBBY = 'twiml_after_lobby'
+"""
+TASK NAMES
+"""
+TASK_GATHER = 'gather'
+ENTITY_ID = 'entity_id'
+
+
+MESSAGE = 'message'
+ERROR = 'error'
 
 """
 POSTGRESS DB
