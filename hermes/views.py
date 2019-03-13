@@ -245,6 +245,8 @@ def add_callsid_to_session(call_sid, id, value):
     Returns:
 
     """
+    if call_sid not in HERMES_SESSION.keys():
+        HERMES_SESSION[call_sid] = {}
     HERMES_SESSION[call_sid][id] = value
 
 
