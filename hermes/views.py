@@ -124,7 +124,7 @@ def incoming_voice_call_gather(request):
         if request.session[parameters[gv.CALL_SID]][taskID]['error']:
             respond_message = request.session[parameters[gv.CALL_SID]][taskID]['message']
             # remove task from session bc it contain errors
-            del request.session[parameters[gv.CALL_SID]][taskID]
+            # del request.session[parameters[gv.CALL_SID]][taskID]
             print(respond_message)
             return HttpResponse(respond_message, status=400)
 
@@ -135,7 +135,7 @@ def incoming_voice_call_gather(request):
         # verify if tries are done
         if request.session[parameters[gv.CALL_SID]][taskID]['tries'] >= request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
             temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
-            del request.session[parameters[gv.CALL_SID]][taskID]
+            # del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
 
         # increase tries and return option not recognized message
