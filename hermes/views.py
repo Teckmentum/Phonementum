@@ -69,7 +69,7 @@ def incoming_voice_call_lobby(request):
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
         print("entro a add hermes ssesion")
         add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
-        print(request.session)
+        print(request.session.keys())
 
 
 
@@ -86,11 +86,9 @@ def incoming_voice_call_from_lobby(request):
         return HttpResponse(parameters[gv.MESSAGE], status=parameters['status'])
 
     # get twiml from hermessession
-    if parameters[gv.CALL_SID] in HERMES_SESSION.keys() and gv.TWILIOML_AFTER_LOBBY in HERMES_SESSION[parameters[gv.CALL_SID]].keys():
-        return HttpResponse(HERMES_SESSION[parameters[gv.CALL_SID]][gv.TWILIOML_AFTER_LOBBY])
+    if parameters[gv.CALL_SID] in request.session.keys() and gv.TWILIOML_AFTER_LOBBY in request.session.get(gv.CALL_SID).keys():
+        return HttpResponse(request.session.get(gv.CALL_SID)[gv.TWILIOML_AFTER_LOBBY])
     else:
-        print(parameters[gv.CALL_SID])
-        print(HERMES_SESSION)
         return HttpResponse("For %s and twiml after lobby wasnt found" % (parameters[gv.CALL_SID]), status=400)
 
 
