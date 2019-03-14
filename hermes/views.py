@@ -118,7 +118,9 @@ def incoming_voice_call_gather(request):
     if taskID not in request.session[parameters[gv.CALL_SID]].keys():
         print("entro")
         # include gather task at session
-        request.session[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
+        task_value = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
+
+        add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID],id=taskID,value=task_value)
 
         # verify error in getting task
         if request.session[parameters[gv.CALL_SID]][taskID]['error']:
@@ -140,6 +142,7 @@ def incoming_voice_call_gather(request):
 
         # increase tries and return option not recognized message
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] += 1
+        print(request.session.keys())
         return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
