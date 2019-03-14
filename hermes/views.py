@@ -142,7 +142,7 @@ def incoming_voice_call_gather(request):
 
         # increase tries and return option not recognized message
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] += 1
-        print(request.session.keys())
+        print(request.session[parameters[gv.CALL_SID]].keys())
         return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
