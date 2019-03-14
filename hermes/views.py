@@ -112,6 +112,8 @@ def incoming_voice_call_gather(request):
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
     taskID = parameters[gv.ID] + gv.TASK_GATHER
+    print(parameters[gv.ID])
+    print(parameters[gv.CALL_SID])
     if taskID not in request.session[parameters[gv.CALL_SID]].keys():
         print("entro")
         # include gather task at session
