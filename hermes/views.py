@@ -152,6 +152,7 @@ def incoming_voice_call_gather(request):
     if twiml_xml['error']:
         print(twiml_xml)
         return HttpResponse(twiml_xml, status=400)
+    add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], id=taskID, value="test")
 
     return HttpResponse(twiml_xml['twiml_xml'])
 
