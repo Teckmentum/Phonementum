@@ -8,9 +8,6 @@ from hermes import hermes_errors as herror
 from db_manager import db_getters, validations as db_validation
 # Create your views here.
 
-requestsession = {} # callerID: {taskID}
-
-
 @csrf_exempt
 def greetings(request):
     """
@@ -51,7 +48,8 @@ def incoming_voice_call_lobby(request):
 
     # get twiml_xml if error o no twiml was found reeturn error
     compound_id = set_compound_id(entity_id=parameters[gv.ID], table_type_id=parameters[gv.TO])
-    twiml_xml = db_getters.get_twiml_xml(compound_id=compound_id, get_twiml_table_name=set_table_name(parameters[gv.ENTITY_NAME], 'phone'))
+    twiml_xml = db_getters.get_twiml_xml(compound_id=compound_id,
+                                         get_twiml_table_name=set_table_name(parameters[gv.ENTITY_NAME], 'phone'))
     if twiml_xml['error']:
         print(twiml_xml[gv.MESSAGE])
         return HttpResponse(twiml_xml[gv.MESSAGE], status=500)
@@ -65,7 +63,8 @@ def incoming_voice_call_lobby(request):
 
     # add twiml after lobby at hermes session
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
-        add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
+        add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID],
+                               value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
 
     return HttpResponse(twiml_xml['twiml_xml'], status=200)
 
@@ -128,10 +127,11 @@ def incoming_voice_call_gather(request):
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] = 1
 
     # validate gather selection within range
-    print(request.session)
     if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
         # verify if tries are done
-        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] == request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
+        print(request.session[parameters[gv.CALL_SID]][taskID]['tries'])
+        print(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry'])
+        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] >= request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
             temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
             del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
@@ -151,9 +151,8 @@ def incoming_voice_call_gather(request):
     return HttpResponse(twiml_xml['twiml_xml'])
 
 
-
 """
-
+HELPERS FUNCTIONS
 """
 
 
