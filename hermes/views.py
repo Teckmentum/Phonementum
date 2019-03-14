@@ -112,7 +112,8 @@ def incoming_voice_call_gather(request):
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
     taskID = parameters[gv.ID] + gv.TASK_GATHER
-    if taskID not in request.session.get(parameters[gv.CALL_SID]).keys():
+    if taskID not in request.session[parameters[gv.CALL_SID]].keys():
+        print("entro")
         # include gather task at session
         request.session[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
 
@@ -129,8 +130,6 @@ def incoming_voice_call_gather(request):
     # validate gather selection within range
     if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
         # verify if tries are done
-        print(request.session[parameters[gv.CALL_SID]][taskID]['tries'])
-        print(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry'])
         if request.session[parameters[gv.CALL_SID]][taskID]['tries'] >= request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
             temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
             del request.session[parameters[gv.CALL_SID]][taskID]
@@ -138,7 +137,6 @@ def incoming_voice_call_gather(request):
 
         # increase tries and return option not recognized message
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] += 1
-        print(request.session[parameters[gv.CALL_SID]][taskID]['tries'])
         return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
