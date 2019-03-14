@@ -112,11 +112,7 @@ def incoming_voice_call_gather(request):
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
     taskID = parameters[gv.ID] + gv.TASK_GATHER
-    print(taskID)
-    print(parameters[gv.CALL_SID])
-    print(request.session[parameters[gv.CALL_SID]].keys())
     if taskID not in request.session[parameters[gv.CALL_SID]].keys():
-        print("entro")
         # include gather task at session
         task_value = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
 
@@ -136,7 +132,7 @@ def incoming_voice_call_gather(request):
     # validate gather selection within range
     if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
         # verify if tries are done
-        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] >= request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
+        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
             temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
             del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
