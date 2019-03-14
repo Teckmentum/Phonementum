@@ -8,7 +8,7 @@ from hermes import hermes_errors as herror
 from db_manager import db_getters, validations as db_validation
 # Create your views here.
 
-HERMES_SESSION = {} # callerID: {taskID}
+requestsession = {} # callerID: {taskID}
 
 
 @csrf_exempt
@@ -67,9 +67,6 @@ def incoming_voice_call_lobby(request):
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
         add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
 
-
-
-
     return HttpResponse(twiml_xml['twiml_xml'], status=200)
 
 
@@ -104,40 +101,46 @@ def incoming_voice_call_gather(request):
     parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME])
 
     # verify for get_and_validate_parameters errors
-    if parameters['error'] or parameters['isValid'] is False:
+    if parameters[gv.ERROR]:
         return HttpResponse(parameters['message'], status=400)
+
+    # validate relationship between entity and id
+    validation = validate_entity_id_relationship(parameters[gv.ENTITY_NAME], parameters[gv.ID])
+    if validation[gv.ERROR] or not validation['isValid']:
+        print(validation[gv.MESSAGE])
+        return HttpResponse(validation[gv.MESSAGE], status=validation['status'])
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
     taskID = parameters[gv.ENTITY_ID] + gv.TASK_GATHER
-    if parameters[gv.CALL_SID] not in HERMES_SESSION.keys():
-        HERMES_SESSION[parameters[gv.CALL_SID]] = {}
+    if parameters[gv.CALL_SID] not in request.session.keys():
+        request.session[parameters[gv.CALL_SID]] = {}
 
-    if taskID not in HERMES_SESSION.get(parameters[gv.CALL_SID]).keys():
+    if taskID not in request.session.get(parameters[gv.CALL_SID]).keys():
         # include gather task at session
-        HERMES_SESSION[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters['entity_id'])
+        request.session[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters['entity_id'])
 
         # verify error in getting task
-        if HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['error']:
-            respond_message = HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['message']
+        if request.session[parameters[gv.CALL_SID]][taskID]['error']:
+            respond_message = request.session[parameters[gv.CALL_SID]][taskID]['message']
             # remove task from session bc it contain errors
-            del HERMES_SESSION[parameters[gv.CALL_SID]][taskID]
+            del request.session[parameters[gv.CALL_SID]][taskID]
             print(respond_message)
             return HttpResponse(respond_message, status=400)
 
-        HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['tries'] = 1
+        request.session[parameters[gv.CALL_SID]][taskID]['tries'] = 1
 
     # validate gather selection within range
-    print(HERMES_SESSION)
-    if int(parameters[gv.SELECTION]) > HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
+    print(request.session)
+    if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
         # verify if tries are done
-        if HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['tries'] == HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
-            temp_response = HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
-            del HERMES_SESSION[parameters[gv.CALL_SID]][taskID]
+        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] == request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
+            temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
+            del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
 
         # increase tries and return option not recognized message
-        HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['tries'] += 1
-        return HttpResponse(HERMES_SESSION[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
+        request.session[parameters[gv.CALL_SID]][taskID]['tries'] += 1
+        return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
     twiml_xml = db_getters.get_twiml_xml(compound_id=parameters[gv.ID], get_twiml_table_name=parameters[gv.TABLE_NAME])
