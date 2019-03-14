@@ -121,12 +121,13 @@ def incoming_voice_call_gather(request):
         task_value = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
 
         add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID],id=taskID,value=task_value)
+        request.session.modified = True
 
         # verify error in getting task
         if request.session[parameters[gv.CALL_SID]][taskID]['error']:
             respond_message = request.session[parameters[gv.CALL_SID]][taskID]['message']
             # remove task from session bc it contain errors
-            # del request.session[parameters[gv.CALL_SID]][taskID]
+            del request.session[parameters[gv.CALL_SID]][taskID]
             print(respond_message)
             return HttpResponse(respond_message, status=400)
 
@@ -137,11 +138,12 @@ def incoming_voice_call_gather(request):
         # verify if tries are done
         if request.session[parameters[gv.CALL_SID]][taskID]['tries'] >= request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
             temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
-            # del request.session[parameters[gv.CALL_SID]][taskID]
+            del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
 
         # increase tries and return option not recognized message
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] += 1
+        request.session.modified = True
         print(request.session[parameters[gv.CALL_SID]].keys())
         return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
@@ -152,7 +154,6 @@ def incoming_voice_call_gather(request):
     if twiml_xml['error']:
         print(twiml_xml)
         return HttpResponse(twiml_xml, status=400)
-    add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], id=taskID, value="test")
 
     return HttpResponse(twiml_xml['twiml_xml'])
 
