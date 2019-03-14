@@ -141,7 +141,7 @@ def incoming_voice_call_gather(request):
         return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
-    twiml_xml = db_getters.get_twiml_xml(compound_id=parameters[gv.ID], get_twiml_table_name=parameters[gv.TABLE_NAME])
+    twiml_xml = db_getters.get_twiml_xml(compound_id=parameters[gv.ID], get_twiml_table_name=parameters[gv.ENTITY_NAME])
 
     # verify for errors
     if twiml_xml['error']:
