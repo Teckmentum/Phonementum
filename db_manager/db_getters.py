@@ -47,11 +47,10 @@ def get_values_from_hermes(get_values_id=None, table_name=None, column=None, com
         query = "select %s from hermes.%s where %s = '%s'" % (column, table_name,
                                                         validations.ID_NAMES[table_name], get_values_id)
     else:
-        temp_id = compound_id[1:-1].split(',')
-        id_for_query = '('
-        for elements in temp_id:
-            id_for_query += "'" + elements.strip() + "', "
-        id_for_query = id_for_query[:-2] + ")"
+        id_for_query = "('"
+        for element in compound_id:
+            id_for_query = id_for_query + element.strip() + "', '"
+        id_for_query = id_for_query[:-3] + ")"
         query = "select %s from hermes.%s where %s = %s" % (column, table_name,
                                                               validations.ID_NAMES[table_name], id_for_query)
 
