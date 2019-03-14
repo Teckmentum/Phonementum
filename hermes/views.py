@@ -256,7 +256,7 @@ def set_table_name(entity_name, table_type):
 
 
 def set_compound_id(entity_id, table_type_id):
-    return '(%s, %s)' % (table_type_id, entity_id)
+    return [table_type_id, entity_id]
 
 
 def add_callsid_to_session(request, call_sid, id, value):
