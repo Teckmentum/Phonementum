@@ -113,12 +113,9 @@ def incoming_voice_call_gather(request):
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
     taskID = parameters[gv.ID] + gv.TASK_GATHER
-    if parameters[gv.CALL_SID] not in request.session.keys():
-        request.session[parameters[gv.CALL_SID]] = {}
-
     if taskID not in request.session.get(parameters[gv.CALL_SID]).keys():
         # include gather task at session
-        request.session[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters['entity_id'])
+        request.session[parameters[gv.CALL_SID]][taskID] = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
 
         # verify error in getting task
         if request.session[parameters[gv.CALL_SID]][taskID]['error']:
