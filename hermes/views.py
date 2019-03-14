@@ -90,7 +90,8 @@ def incoming_voice_call_from_lobby(request):
 @csrf_exempt
 def incoming_voice_call_gather(request):
     """
-    This method get an twiml_xml from an option table and return it. Gather method work only on _options table at hermes db
+    This method get an twiml_xml from an option table and return it. Gather method work only
+    on _options table at hermes db. The request need to pass, callsid, to, id, entity_name
     Args:
         request ():
 
@@ -111,7 +112,7 @@ def incoming_voice_call_gather(request):
         return HttpResponse(validation[gv.MESSAGE], status=validation['status'])
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
-    taskID = parameters[gv.ENTITY_ID] + gv.TASK_GATHER
+    taskID = parameters[gv.ID] + gv.TASK_GATHER
     if parameters[gv.CALL_SID] not in request.session.keys():
         request.session[parameters[gv.CALL_SID]] = {}
 
