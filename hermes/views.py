@@ -64,12 +64,9 @@ def incoming_voice_call_lobby(request):
                                          get_twiml_table_name=parameters[gv.ENTITY_NAME])
 
     # add twiml after lobby at hermes session
-    print(twiml_xml_after_lobby)
-    print('----------------------------------------------')
     if not twiml_xml_after_lobby[gv.ERROR] and twiml_xml_after_lobby['twiml_xml'] is not None:
-        print("entro a add hermes ssesion")
         add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID], value=twiml_xml_after_lobby['twiml_xml'], id=gv.TWILIOML_AFTER_LOBBY)
-        print(request.session.keys())
+
 
 
 
@@ -87,6 +84,7 @@ def incoming_voice_call_from_lobby(request):
 
     # get twiml from hermessession
     print(request.session.keys())
+    print(request.session.values())
     if parameters[gv.CALL_SID] in request.session.keys() and gv.TWILIOML_AFTER_LOBBY in request.session.get(gv.CALL_SID).keys():
         return HttpResponse(request.session.get(gv.CALL_SID)[gv.TWILIOML_AFTER_LOBBY])
     else:
