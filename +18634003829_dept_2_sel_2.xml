@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-<!--Redirecciona un sip para ventas: clientes nuevos-->
-<Dial>
-    <Sip>
-        sip:ventas2@etaxes.sip.us1.twilio.com <!--Ventas 2 es ventas clientes nuevos-->
-    </Sip>
-</Dial>
-</Response>

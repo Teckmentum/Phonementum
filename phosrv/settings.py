@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# import django.conf.global_settings as gs
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -77,6 +79,7 @@ WSGI_APPLICATION = 'phosrv.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ["postgres_database"],
@@ -86,8 +89,18 @@ DATABASES = {
         'PORT': '5432'
     }
 }
-
-
+"""
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ["postgres_database"],
+        'USER': os.environ["postgres_user"],
+        'PASSWORD': os.environ["postgres_password"],
+        'HOST': os.environ["postgres_host"],
+        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
+"""
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 

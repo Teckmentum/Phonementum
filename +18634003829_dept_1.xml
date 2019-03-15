@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Gather numDigits="1" action="https://phonementum.herokuapp.com/voice/sip_redirect?domain=etaxes&amp;department=1">
-        <Say loop="2">Para errores de vadilación, marque el 1. Planillas rechazadas, marque el 2. Instalaciones, marque el 3. Otros, marque el 3.</Say>
-        <Pause length="4"/>
-    </Gather>
-</Response>
