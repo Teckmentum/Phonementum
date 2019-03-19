@@ -21,6 +21,7 @@ def greetings(request):
     """
     return HttpResponse("Saludos mi nombre es Hermes y soy el IVR de Teckmentum")
 
+
 @csrf_exempt
 def incoming_voice_call_lobby(request):
     """
@@ -156,7 +157,9 @@ def incoming_voice_call_gather(request):
 
 @csrf_exempt
 def hermes_task(request, hermes_task=None):
-    HttpResponse("hola")
+
+    return HttpResponse("hola")
+
 
 """
 HELPERS FUNCTIONS
