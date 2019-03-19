@@ -1,7 +1,14 @@
 
-HERMES_TASK = {'list_company_locations'}
+HERMES_TASK = {'list_sites_locations'}
 
-def list_company_locations():
+
+def list_sites_locations():
     pass
 
-def get_nereast_location
+
+def get_nereast_location():
+    pass
+
+
+
+

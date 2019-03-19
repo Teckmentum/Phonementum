@@ -85,12 +85,12 @@ def incoming_voice_call_from_lobby(request):
         return HttpResponse("For %s and twiml after lobby wasnt found" % (parameters[gv.CALL_SID]), status=400)
 
 
-
 @csrf_exempt
 def incoming_voice_call_gather(request):
     """
     This method get an twiml_xml from an option table and return it. Gather method work only
-    on _options table at hermes db. The request need to pass, callsid, to, id, entity_name
+    on _options table at hermes db. The request need to pass, callsid, to, id, entity_name, taskname.
+    Funciona para cualquier task q necesite un gather, as long haya una tabala en el db taskname_options
     Args:
         request ():
 
@@ -98,7 +98,7 @@ def incoming_voice_call_gather(request):
 
     """
     # get parameters
-    parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME])
+    parameters = get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME, gv.TASK_NAME])
 
     # verify for get_and_validate_parameters errors
     if parameters[gv.ERROR]:
@@ -111,7 +111,7 @@ def incoming_voice_call_gather(request):
         return HttpResponse(validation[gv.MESSAGE], status=validation['status'])
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
-    taskID = parameters[gv.ID] + gv.TASK_GATHER
+    taskID = parameters[gv.ID] + parameters[gv.TASK_NAME]
     if taskID not in request.session[parameters[gv.CALL_SID]].keys():
         # include gather task at session
         task_value = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
@@ -152,6 +152,8 @@ def incoming_voice_call_gather(request):
         return HttpResponse(twiml_xml, status=400)
 
     return HttpResponse(twiml_xml['twiml_xml'])
+
+
 
 
 """

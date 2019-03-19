@@ -45,6 +45,7 @@ TASK NAMES
 """
 TASK_GATHER = 'gather'
 ENTITY_ID = 'entity_id'
+TASK_NAME = 'taskname'
 
 
 MESSAGE = 'message'
