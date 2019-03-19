@@ -154,7 +154,9 @@ def incoming_voice_call_gather(request):
     return HttpResponse(twiml_xml['twiml_xml'])
 
 
-
+@csrf_exempt
+def hermes_task(request, hermes_task=None):
+    HttpResponse("hola")
 
 """
 HELPERS FUNCTIONS
