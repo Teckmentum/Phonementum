@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0, '../../')
 sys.path.insert(0, '../')
 from db_manager import validations, db_connector as connect, db_errors
+import global_settings as gv
 from xml.etree import cElementTree as ET
 from psycopg2.extensions import new_type, register_type
 import xml.dom.minidom as xmldom
@@ -11,11 +12,11 @@ import xml.dom.minidom as xmldom
 
 # this methods are to cast xml data from postgres to python xml object
 
-def get_values_from_hermes(get_values_id=None, table_name=None, column=None, compound_id=None):
+def get_value_from_hermes(get_values_id=None, table_name=None, column=None, compound_id=None):
     """
     Get from the specified table at schema hermes the value of column where the Pk is get_values_id
     Args:
-        compound_id (str): para PK compuestos
+        compound_id (array): para PK compuestos
         get_values_id (str): PK at table_name
         table_name (str): name of the table to extract a value
         column (str): A specific column at table_name
@@ -27,7 +28,6 @@ def get_values_from_hermes(get_values_id=None, table_name=None, column=None, com
         1. Author: Glorimar Castro-Noriega
     """
     result = {'error': False}
-
     # verify param values arent null
     if (get_values_id is None and compound_id is None) or table_name is None or column is None:
         return {'error': True, 'message': db_errors.ArgsCantBeNone('get_values_from_hermes', 'id', 'table_name', 'column').message}
@@ -72,6 +72,85 @@ def get_values_from_hermes(get_values_id=None, table_name=None, column=None, com
     return result
 
 
+def get_values_from_hermes(get_values_id=None, get_values_id_name=None, table_name=None, column=None, compound_id=None, compound_id_names=None):
+    """
+    Get from the specified table at schema hermes the value of column where the Pk is get_values_id
+    Args:
+        compound_id (array): para PK compuestos
+        get_values_id (str): PK at table_name
+        table_name (str): name of the table to extract a value
+        column (array): A specific column at table_name
+
+    Returns:
+        dic: if an error was rise the dic contain 'error' and 'message' if not is contain 'error' and column
+
+    Notes:
+        1. Author: Glorimar Castro-Noriega
+        2. IMPORTANTE: si se ponen los id compound los  nombres de esos id se tienen que pasar y en el mismo orden
+        3. el resultado estara almacenado en 'fetch' y es una lista de tuplos
+    """
+    result = {'error': False}
+    # verify param values arent null
+    if (get_values_id is None and compound_id is None) or table_name is None or column is None:
+        return {'error': True, 'message': db_errors.ArgsCantBeNone('get_values_from_hermes', 'id', 'table_name', 'column').message}
+
+    # set string for columns to extract, no ponerle parentecis pq
+    # sino devuelve un string ek fetchall en vez de un tuplo
+    column_str = ""
+    for element in column:
+        column_str = column_str + element.strip() + ", "
+    column_str = column_str[:-2]
+
+    # connect to db
+    get_values_temp = connect.connect2django()
+
+    if get_values_temp['error'] is True:
+        return get_values_temp
+
+    # verify table name is valid
+    if table_name not in validations.ALLOWED_TABLE_VALUES.keys():
+        return {'error': True, 'message': db_errors.DBError('%s is not a valid table name' % table_name)}
+
+    # get value from db
+    if get_values_id is not None:
+        query = "select %s from hermes.%s where %s = '%s'" % (column_str, table_name,
+                                                              get_values_id_name, get_values_id)
+    else:
+        # set id and colums name(s) for the id for the query
+        id_names = "("
+        id_for_query = "('"
+        for element in compound_id:
+            id_for_query = id_for_query + element.strip() + "', '"
+        id_for_query = id_for_query[:-3] + ")"
+
+        for element in compound_id_names:
+            id_names = id_names + element.strip() + ", "
+        id_names = id_names[:-2] + ")"
+
+        query = "select %s from hermes.%s where %s = %s" % (column_str, table_name,
+                                                            id_names, id_for_query)
+
+    print(query)
+    try:
+        get_values_temp['cur'].execute(query)
+        # fetch all
+        result['fetch'] = get_values_temp['cur'].fetchall()
+
+    except:
+        return {'error': True, 'message': db_errors.DBError(message='An un expected error has ocurre at get_values_from_hermes')}
+    finally:
+        connect.close_db_connection(conn=get_values_temp['conn'], cur=get_values_temp['cur'])
+
+    # verify that a value was found
+    if result['fetch'] is None or not result['fetch']:
+        result[gv.ERROR] = True
+        result[gv.MESSAGE] = db_errors.ValueNotFound(table_name=table_name, id=get_values_id, value_looked=column)
+        result[gv.STATUS] = 400
+        return result
+
+    return result
+
+
 def get_twiml_xml(get_twiml_id=None, compound_id=None, get_twiml_table_name=None):
     """
     Return the valuo at the column twiml_xml from the specified table_name where the pk is get_twiml_id.
@@ -91,11 +170,11 @@ def get_twiml_xml(get_twiml_id=None, compound_id=None, get_twiml_table_name=None
         return {'error': True, 'message': db_errors.ArgsCantBeNone('get_twiml_id', 'compound_id', 'get_twiml_id', 'get_twiml_table_name')}
 
     if get_twiml_id is not None:
-        return get_values_from_hermes(get_values_id=get_twiml_id, table_name=get_twiml_table_name,
-                                            column='twiml_xml')
+        return get_value_from_hermes(get_values_id=get_twiml_id, table_name=get_twiml_table_name,
+                                     column='twiml_xml')
     else:
-        return get_values_from_hermes(compound_id=compound_id, table_name=get_twiml_table_name,
-                                      column='twiml_xml')
+        return get_value_from_hermes(compound_id=compound_id, table_name=get_twiml_table_name,
+                                     column='twiml_xml')
 
 
 def get_task(id_value, task_name) -> dict:
@@ -114,7 +193,9 @@ def get_task(id_value, task_name) -> dict:
                 'message': db_errors.ArgsCantBeNone('id_value', 'task_name')}
 
     # get task from hermes.task table
-    return get_values_from_hermes(get_values_id=id_value + task_name, table_name='task', column='var_values')
+    return get_value_from_hermes(get_values_id=id_value + task_name, table_name='task', column='var_values')
 
 
+def get_sites(task_id, c_ein):
+    return get_value_from_hermes(compound_id=[task_id, c_ein], table_name='umbrella_sites_options', column='say_name_es')
 

@@ -1,12 +1,14 @@
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from requests import status_codes
+
 
 import global_settings as gv
 from hermes import hermes_errors as herror
 from hermes import hermes_helpers as hhelper
-from db_manager import db_getters, validations as db_validation
+from hermes import hermes_tasks as htask
+from db_manager import db_getters
+
+import json
 # Create your views here.
 
 @csrf_exempt
@@ -28,7 +30,7 @@ def incoming_voice_call_lobby(request):
     """
     This method extract from _phone table the twiml_xml value. To work it need
     entity_name, id, callsid and To. Callsid and To los provee twilio pero
-    entity_name amd id tienen q estar en los query parameters
+    entity_name amd id tienen q estar en los query parameters.
     Args:
         request ():
 
@@ -113,21 +115,13 @@ def incoming_voice_call_gather(request):
         return HttpResponse(validation[gv.MESSAGE], status=validation['status'])
 
     # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
+    # todo se deberia del mensaje de option not recognized cuando se vayan a repetir las opciones buscar si hay un
+    # twiml after lobby y repetirlo
     taskID = parameters[gv.ID] + parameters[gv.TASK_NAME]
     if taskID not in request.session[parameters[gv.CALL_SID]].keys():
-        # include gather task at session
-        task_value = db_getters.get_task(task_name=gv.TASK_GATHER, id_value=parameters[gv.ID])
-
-        hhelper.add_callsid_to_session(request=request, call_sid=parameters[gv.CALL_SID],id=taskID,value=task_value)
-        request.session.modified = True
-
-        # verify error in getting task
-        if request.session[parameters[gv.CALL_SID]][taskID]['error']:
-            respond_message = request.session[parameters[gv.CALL_SID]][taskID]['message']
-            # remove task from session bc it contain errors
-            del request.session[parameters[gv.CALL_SID]][taskID]
-            print(respond_message)
-            return HttpResponse(respond_message, status=400)
+        result = hhelper.get_add_task(request=request, parameters=parameters, taskID=taskID)
+        if result[gv.ERROR] is True:
+            return HttpResponse(result, status=result['status'])
 
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] = 1
 
@@ -169,8 +163,15 @@ def hermes_task(request, hermes_task=None):
     Returns:
 
     """
+    result = hhelper.set_result()
 
-    return HttpResponse("hola")
+    if hermes_task == htask.HERMES_LIST_SITES:
+        result = htask.list_sites(request)
+
+    if result[gv.ERROR] is True:
+        return HttpResponse(result[gv.MESSAGE], status=result[gv.STATUS])
+
+    return HttpResponse(result[gv.TWILM_XML], status=200)
 
 
 

@@ -19,29 +19,29 @@ class DBManagerGetValueFromHermesCases(TestCase):
         self.cur.execute('select test_column1 from hermes.test where test_id=1')
         result = self.cur.fetchone()[0]
 
-        expected = db_getters.get_values_from_hermes(get_values_id='1', table_name='test',
-                                                     column='test_column1')
+        expected = db_getters.get_value_from_hermes(get_values_id='1', table_name='test',
+                                                    column='test_column1')
 
         self.assertEqual(result, expected['test_column1'])
         self.assertFalse(expected['error'])
 
     def test_get_value_from_hermes_invalid_table_name(self):
-        expected = db_getters.get_values_from_hermes(get_values_id='1', table_name='testX',
-                                                     column='test_column1')
+        expected = db_getters.get_value_from_hermes(get_values_id='1', table_name='testX',
+                                                    column='test_column1')
 
         self.assertTrue(expected['error'])
         self.assertTrue(expected['message'] is not None)
 
     def test_get_value_from_hermes_not_id(self):
-        expected = db_getters.get_values_from_hermes(get_values_id='300', table_name='test',
-                                                     column='test_column1')
+        expected = db_getters.get_value_from_hermes(get_values_id='300', table_name='test',
+                                                    column='test_column1')
 
         self.assertTrue(expected['error'])
         self.assertTrue(expected['message'] is not None)
 
     def test_get_value_from_hermes_invalid_column_name(self):
-        expected = db_getters.get_values_from_hermes(get_values_id='1', table_name='test',
-                                                     column='test_column300')
+        expected = db_getters.get_value_from_hermes(get_values_id='1', table_name='test',
+                                                    column='test_column300')
 
         self.assertTrue(expected['error'])
         self.assertTrue(expected['message'] is not None)
@@ -69,8 +69,8 @@ class DBManagerGetTwimlXmlCases(TestCase):
         self.assertFalse(expected['error'])
 
     def test_get_twiml_xml_invalid_id(self):
-        expected = db_getters.get_values_from_hermes(get_values_id='5', table_name='test',
-                                                     column='twiml_xml')
+        expected = db_getters.get_value_from_hermes(get_values_id='5', table_name='test',
+                                                    column='twiml_xml')
 
         self.assertTrue(expected['error'])
         self.assertTrue(expected['message'] is not None)
@@ -102,4 +102,28 @@ class DBManagerGetGatherTaskCases(TestCase):
 
         self.assertTrue(expected['error'])
         self.assertTrue(expected['message'] is not None)
+
+
+class DBManagerGetValuesFromHermesCases(TestCase):
+    cur = None
+    conn = None
+
+    def setUp(self):
+        setup_temp = db_connector.connect2django()
+        self.cur = setup_temp['cur']
+        self.conn = setup_temp['conn']
+
+    def tearDown(self):
+        db_connector.close_db_connection(cur=self.cur, conn=self.conn)
+
+    def test_get_value_from_hermes(self):
+        self.cur.execute("select say_name_es from hermes.umbrella_sites_options where task_id = '000008830list_sites'")
+        result = self.cur.fetchall()
+        for elements in result:
+            print(elements)
+
+        expected = db_getters.get_values_from_hermes(get_values_id='000008830list_sites', get_values_id_name='task_id', table_name='umbrella_sites_options', column=['say_name_es'])
+
+        #self.assertEqual(result, expected['test_column1'])
+        #self.assertFalse(expected['error'])
 

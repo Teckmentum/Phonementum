@@ -76,6 +76,6 @@ class ValueNotFound(DBError):
             Author: Glorimar Castro-Noriega
             Date: 3-11-19
         """
-        self.message = 'There wasnt any %s at %s for %s PK' % (value_looked, table_name, id)
+        self.message = 'There wasnt any %s at %s for %s PK' % (str(value_looked), table_name, id)
 
         super(ValueNotFound, self).__init__(self.message)

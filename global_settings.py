@@ -14,8 +14,8 @@ session = {} # for a temp global session
 """
 TWILIO VARIABLES
 """
-twilio_sid      = os.environ["twilio_sid"]
-twilio_token    = os.environ["twilio_token"]
+TWILIO_SID      = os.environ["twilio_sid"]
+TWILIO_TOKEN    = os.environ["twilio_token"]
 #twilio_etaxes_workspace_sid = os.environ["twilio_workspace_etaxes_sid"]
 #twilio_etaxes_workflow_sid  = {"soporte": os.environ["twilio_etaxes_workflow_soporte"], "ventas": os.environ["twilio_etaxes_workflow_ventas"]}
 
@@ -26,7 +26,7 @@ twilio_num_etax_fl  = "+18634003829"
 twilio_num_etax_ne  = "+14023829377"
 
 
-
+HOST = "https://phonementum.herokuapp.com"
 
 """
 TWILIO BODY PARAMETERS
@@ -40,16 +40,27 @@ CALL_SID    = 'CallSid'
 ENTITY_NAME = 'entity_name'
 
 TWILIOML_AFTER_LOBBY = 'twiml_after_lobby'
+TWILM_XML = 'twiml_xml'
+
 """
 TASK NAMES
 """
 TASK_GATHER = 'gather'
 ENTITY_ID = 'entity_id'
 TASK_NAME = 'taskname'
-
+IS_GATHER = 'is_gather'
+INTRO_MSG = 'intro_msg'
+TASK_VALUES = 'var_values'
+RANGE = 'range'
+FETCH = 'fetch'
+GATEHER_ACTION = 'gather_action'
+NUM_DIGITS = 'numDigits'
 
 MESSAGE = 'message'
 ERROR = 'error'
+STATUS = 'status'
+
+
 
 """
 POSTGRESS DB
