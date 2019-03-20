@@ -85,6 +85,8 @@ def incoming_voice_call_from_lobby(request):
 
     # get twiml from hermessession
     if parameters[gv.CALL_SID] in request.session.keys() and gv.TWILIOML_AFTER_LOBBY in request.session[parameters[gv.CALL_SID]].keys():
+        print('esta devolviendo')
+        print(request.session[parameters[gv.CALL_SID]][gv.TWILIOML_AFTER_LOBBY])
         return HttpResponse(request.session[parameters[gv.CALL_SID]][gv.TWILIOML_AFTER_LOBBY])
     else:
         return HttpResponse("For %s and twiml after lobby wasnt found" % (parameters[gv.CALL_SID]), status=400)
