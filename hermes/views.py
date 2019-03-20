@@ -147,6 +147,8 @@ def incoming_voice_call_gather(request):
         print(twiml_xml)
         return HttpResponse(twiml_xml, status=400)
 
+    # delete gatger task fo id at hermes session
+    del request.session[parameters[gv.CALL_SID]][taskID]
     return HttpResponse(twiml_xml['twiml_xml'])
 
 
