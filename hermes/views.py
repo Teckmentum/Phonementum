@@ -101,6 +101,7 @@ def incoming_voice_call_gather(request):
     Returns:
 
     """
+    print('esta entrando en el area de gather')
     # get parameters
     parameters = hhelper.get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME, gv.TASK_NAME])
 
