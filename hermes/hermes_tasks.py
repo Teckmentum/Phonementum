@@ -80,7 +80,9 @@ def list_sites(request):
             for elements in sites[gv.FETCH]:  # todo esto se debe de cambiar a q los indices no sean puesto directo talvez una referencia de indices a otro array
                 mensaje = elements[0]
                 mensaje += ', oprima el ' + str(elements[1])
-                gather.append(Say(voice=elements[2]).ssml_prosody(mensaje, rate='90%'))
+                say = Say('', voice=elements[2])
+                say.ssml_prosody(mensaje, rate='90%')
+                gather.append(say)
                 # gather.say(message= mensaje, voice=elements[2])
 
             # add pause
