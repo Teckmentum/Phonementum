@@ -80,7 +80,9 @@ def list_sites(request):
             for elements in sites[gv.FETCH]:  # todo esto se debe de cambiar a q los indices no sean puesto directo talvez una referencia de indices a otro array
                 mensaje = elements[0]
                 mensaje += ', oprima el ' + str(elements[1])
-                gather.say(message= mensaje, voice=elements[2])
+                gather.append(Say(voice=elements[2]).ssml_prosody(mensaje, rate='90%'))
+                # gather.say(message= mensaje, voice=elements[2])
+
             # add pause
             gather.pause(length=3)
 
@@ -108,6 +110,7 @@ def list_sites(request):
 
     request.session.modified = True
     result[gv.TWILM_XML] = resp.to_xml()
+    print(result[gv.TWILM_XML])
     return result
 
 
