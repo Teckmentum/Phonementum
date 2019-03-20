@@ -79,7 +79,7 @@ def list_sites(request):
         for i in range(3): #todo ver como reducir este 3 * n big o
             for elements in sites[gv.FETCH]:  # todo esto se debe de cambiar a q los indices no sean puesto directo talvez una referencia de indices a otro array
                 mensaje = elements[0]
-                mensaje += ', oprima el ' + str(elements[1]) +". "
+                mensaje += ', oprima el ' + str(elements[1]) + ". "
                 say = Say('', voice=elements[2])
                 say.ssml_prosody(mensaje, rate='90%')
                 gather.append(say)
