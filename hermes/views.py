@@ -11,6 +11,11 @@ from db_manager import db_getters
 import json
 # Create your views here.
 
+"""
+session = {callsid: {taskid:{var_values={},...}, taskid:{var_values={},...}}
+           callsid: {taskid:{var_values={},...}, taskid:{var_values={}, gater_option={1: xml, 2:xml}}}
+          }
+"""
 @csrf_exempt
 def greetings(request):
     """
@@ -99,11 +104,15 @@ def incoming_voice_call_gather(request):
         request ():
 
     Returns:
-
+    Notes:
+        1. This method use te query parameter isLocal to decide where the gather options are going to be look up.
+        if True then the gather option for the taskId have to be at request.session at [callsid][taskid][gather_options]
+        if false then the gather option need to be in a table at the db with the table name been equal tu entityname_options
     """
     print('esta entrando en el area de gather')
     # get parameters
     parameters = hhelper.get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME, gv.TASK_NAME])
+    parameters['isLocal'] = request.GET.get('isLocal') if request.GET.get('isLocal')is None else False
 
     # verify for get_and_validate_parameters errors
     if parameters[gv.ERROR]:
@@ -130,7 +139,7 @@ def incoming_voice_call_gather(request):
     if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
         # verify if tries are done
         if request.session[parameters[gv.CALL_SID]][taskID]['tries'] > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
-            temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values']['max_try_messg']
+            temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values'][gv.MAX_TRY_MESG]
             del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
 
@@ -141,16 +150,23 @@ def incoming_voice_call_gather(request):
         return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
-    twiml_xml = db_getters.get_twiml_xml(compound_id=[parameters[gv.SELECTION], parameters[gv.ID]], get_twiml_table_name=hhelper.set_table_name(parameters[gv.ENTITY_NAME], 'options'))
+    twiml_xml = {}
+    if parameters['isLocal']:
+        if 'gather_option' not in request.session[parameters[gv.CALL_SID]][taskID].keys():
+            return HttpResponse('Gather is local  but there wasnt any gather_option for %s at session' % taskID)
+        twiml_xml = request.session[parameters[gv.CALL_SID]][taskID]['gather_option'][parameters[gv.SELECTION]]
+    else:
+        twiml_xml = db_getters.get_twiml_xml(compound_id=[parameters[gv.SELECTION], parameters[gv.ID]], get_twiml_table_name=hhelper.set_table_name(parameters[gv.ENTITY_NAME], 'options'))
 
-    # verify for errors
-    if twiml_xml['error']:
-        print(twiml_xml)
-        return HttpResponse(twiml_xml, status=400)
+        # verify for errors
+        if twiml_xml['error']:
+            print(twiml_xml)
+            return HttpResponse(twiml_xml, status=400)
+        twiml_xml = twiml_xml['twiml_xml']
 
     # delete gatger task fo id at hermes session
     del request.session[parameters[gv.CALL_SID]][taskID]
-    return HttpResponse(twiml_xml['twiml_xml'])
+    return HttpResponse(twiml_xml)
 
 
 @csrf_exempt
