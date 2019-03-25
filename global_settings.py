@@ -52,6 +52,7 @@ IS_GATHER = 'is_gather'
 INTRO_MSG = 'intro_msg'
 TASK_VALUES = 'var_values'
 RANGE = 'range'
+MAX_TRIES = 'maxTry'
 FETCH = 'fetch'
 GATEHER_ACTION = 'gather_action'
 NUM_DIGITS = 'numDigits'
@@ -67,6 +68,7 @@ MESSAGE = 'message'
 ERROR = 'error'
 STATUS = 'status'
 
+SAY_VOICE = 'say_voice'
 
 
 """

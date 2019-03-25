@@ -2,8 +2,9 @@ from hermes import hermes_helpers as hhelper, hermes_errors as herror
 from db_manager import db_getters
 import global_settings as gv
 from twilio.twiml.voice_response import VoiceResponse, Gather, Say
-
+from django.http import HttpResponse, HttpRequest
 HERMES_LIST_SITES = 'list_sites'
+HERMES_REDIRECT_CALL = 'redirect_call'
 
 
 def list_sites(request):
@@ -120,13 +121,14 @@ def get_nereast_location():
     pass
 
 
-def redirect_call(phone_number: int = None, task_values: dict = None) -> object:
+def redirect_call(request: HttpRequest, call_sid, entity_id, entity_name, phone_number: int = None, task_values: dict = None) -> object:
     """
     el metofo pregunta al usuario si quiere ser redireccionado si dice que no el metodo
     le cuelga. Si dice q si lo manda a un numero de telefono o sip. Lo q se encarga el metodo es en el session dr hermes
     anadir para un callsid el task de redirect call con los valores q necesita dicho task. Como el task depende
     de un gather este tsk necesita las variables q gather solicita
     Args:
+        entity_id: id of the entity been worked
         phone_number: numero de telefono donde se redireccionara la llamada
         task_values: diccionario que debe de cotener redirect_msg y goodbye_msg
 
@@ -134,7 +136,7 @@ def redirect_call(phone_number: int = None, task_values: dict = None) -> object:
 
     Notes:
         1. variables para gather: range, maxTry, max_try_messg and option_not_recognized
-        2. variables original del metodo: redirect_msg, goodbye_msg
+        2. variables original del metodo: redirect_msg, goodbye_msg, say_lng
 
     """
     # set result
@@ -146,17 +148,38 @@ def redirect_call(phone_number: int = None, task_values: dict = None) -> object:
         result[gv.gv.ERROR] = True
         result[gv.gv.STATUS] = 500
     if gv.REDIRECT_MSG not in task_values.keys():
-        result[gv.MESSAGE] = herror.MissingParameterAtRequest('redirect_msg')
+        result[gv.MESSAGE] = herror.MissingParameterAtRequest(gv.REDIRECT_MSG)
         result[gv.gv.ERROR] = True
         result[gv.gv.STATUS] = 500
     if gv.GOODBYE_MSG not in task_values.keys():
-        result[gv.MESSAGE] = herror.MissingParameterAtRequest('goodbye_msg')
+        result[gv.MESSAGE] = herror.MissingParameterAtRequest(gv.GOODBYE_MSG)
         result[gv.gv.ERROR] = True
         result[gv.gv.STATUS] = 500
 
+    # set task id
+    task_id = hhelper.set_task_id(entity_id=entity_id, task_name=HERMES_REDIRECT_CALL)
+
     # set goodbye_xml
+    response = VoiceResponse()
+    redirect_goodbye_say = Say(message=task_values[gv.GOODBYE_MSG], voice=task_values[gv.SAY_VOICE])
+    response.append(redirect_goodbye_say)
+    response.hangup()
+
+
+    # add max_try_msg to sesiion callsid/taskid
+    request.session[call_sid][task_id][gv.TASK_VALUES][gv.MAX_TRY_MESG] = response.xml()
+    request.session[call_sid][task_id][gv.TASK_VALUES][gv.RANGE] = 2
+    request.session[call_sid][task_id][gv.TASK_VALUES][gv.MAX_TRIES] = 2
 
     # set redirect_xml
+    response = VoiceResponse()
+    redirect_gather = Gather(action=hhelper.set_gather_action(entity_id, entity_name, HERMES_REDIRECT_CALL, True),
+                             num_digits=1,
+                             method='POST',
+                             )
+    redirect_gather.say(voice=task_values[gv.SAY_VOICE], message=task_values[gv.REDIRECT_MSG])
+    response.append(redirect_gather)
+    request.session[call_sid][task_id][gv.TASK_VALUES][gv.OP] = response.xml()
 
     # add task for callsid at session
 

@@ -162,5 +162,11 @@ def get_add_task(request: HttpRequest, parameters: dict, taskID: str) -> dict:
     return result
 
 
+def set_gather_action(id, entity_name, taskname, is_local = False):
+    gather_action = gv.HOST + "/hermes/voice_call_gather?id=%s&entity_name=%s&taskname=%s&isLocal=%s" % (
+    id, entity_name, taskname, is_local)
+
+    return gather_action
+
 "end of file"
 

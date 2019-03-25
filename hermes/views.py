@@ -138,7 +138,7 @@ def incoming_voice_call_gather(request):
     # validate gather selection within range
     if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
         # verify if tries are done
-        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['maxTry']:
+        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] > request.session[parameters[gv.CALL_SID]][taskID]['var_values'][gv.MAX_TRIES]:
             temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values'][gv.MAX_TRY_MESG]
             del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
@@ -151,7 +151,7 @@ def incoming_voice_call_gather(request):
 
     # get twiml_xml for selected option
     twiml_xml = {}
-    if parameters['isLocal']:
+    if parameters['isLocal'] == 'True':
         if 'gather_option' not in request.session[parameters[gv.CALL_SID]][taskID].keys():
             return HttpResponse('Gather is local  but there wasnt any gather_option for %s at session' % taskID)
         twiml_xml = request.session[parameters[gv.CALL_SID]][taskID]['gather_option'][parameters[gv.SELECTION]]
