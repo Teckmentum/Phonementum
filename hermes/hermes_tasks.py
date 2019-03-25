@@ -1,4 +1,4 @@
-from hermes import hermes_helpers as hhelper
+from hermes import hermes_helpers as hhelper, hermes_errors as herror
 from db_manager import db_getters
 import global_settings as gv
 from twilio.twiml.voice_response import VoiceResponse, Gather, Say
@@ -119,6 +119,48 @@ def list_sites(request):
 def get_nereast_location():
     pass
 
+
+def redirect_call(phone_number: int = None, task_values: dict = None) -> object:
+    """
+    el metofo pregunta al usuario si quiere ser redireccionado si dice que no el metodo
+    le cuelga. Si dice q si lo manda a un numero de telefono o sip. Lo q se encarga el metodo es en el session dr hermes
+    anadir para un callsid el task de redirect call con los valores q necesita dicho task. Como el task depende
+    de un gather este tsk necesita las variables q gather solicita
+    Args:
+        phone_number: numero de telefono donde se redireccionara la llamada
+        task_values: diccionario que debe de cotener redirect_msg y goodbye_msg
+
+    Returns:
+
+    Notes:
+        1. variables para gather: range, maxTry, max_try_messg and option_not_recognized
+        2. variables original del metodo: redirect_msg, goodbye_msg
+
+    """
+    # set result
+    result = hhelper.set_result()
+
+    # verify if funtion parameters are valid:
+    if phone_number is None:
+        result[gv.MESSAGE] = herror.MissingParameterAtRequest('phone_number')
+        result[gv.gv.ERROR] = True
+        result[gv.gv.STATUS] = 500
+    if gv.REDIRECT_MSG not in task_values.keys():
+        result[gv.MESSAGE] = herror.MissingParameterAtRequest('redirect_msg')
+        result[gv.gv.ERROR] = True
+        result[gv.gv.STATUS] = 500
+    if gv.GOODBYE_MSG not in task_values.keys():
+        result[gv.MESSAGE] = herror.MissingParameterAtRequest('goodbye_msg')
+        result[gv.gv.ERROR] = True
+        result[gv.gv.STATUS] = 500
+
+    # set goodbye_xml
+
+    # set redirect_xml
+
+    # add task for callsid at session
+
+    #redirect call to gather
 
 
 

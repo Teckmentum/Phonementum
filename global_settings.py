@@ -56,6 +56,13 @@ FETCH = 'fetch'
 GATEHER_ACTION = 'gather_action'
 NUM_DIGITS = 'numDigits'
 
+"""
+TASK DICTIONARY KEYS NAMES
+"""
+MAX_TRY_MESG = 'max_try_messg'
+GOODBYE_MSG = 'goodbye_msg'
+REDIRECT_MSG = 'redirect_msg'
+
 MESSAGE = 'message'
 ERROR = 'error'
 STATUS = 'status'
