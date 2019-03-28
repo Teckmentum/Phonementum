@@ -16,11 +16,13 @@ from django.contrib import admin
 from django.urls import path
 from hermes import views
 
+
 urlpatterns = [
     # path('', views.greetings),
     path('greetings', views.greetings),
     path('voice_call_gather', views.incoming_voice_call_gather),
     path('voice_call_lobby', views.incoming_voice_call_lobby),
-    path('voice_call_from_lobby', views.incoming_voice_call_from_lobby)
+    path('voice_call_from_lobby', views.incoming_voice_call_from_lobby),
+    path('task/<slug:hermes_task>', views.hermes_task)
 ]
 

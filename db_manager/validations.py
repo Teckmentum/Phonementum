@@ -6,6 +6,7 @@ from db_manager import db_errors
 ALLOWED_TABLE_VALUES = {'phone': r"^\d{11,15}$",
                         'company': r"^\d{9}$",
                         'department': r"^[\w-]{1,19}$",
+                        'umbrella_sites': r"^\d{9}$",
                         'site_dba': r"^\d{7}-\d{4}$",
                         'company_phone': r"^\(\w{11,15}, \w{9}\)$",
                         'department_phone': r"^\(\d{11,15}, [\w-]{1,19}\)$",
@@ -14,11 +15,13 @@ ALLOWED_TABLE_VALUES = {'phone': r"^\d{11,15}$",
                         'site_dba_options': r"^\(\d+, \d{7}-\d{4}\)$",
                         'department_options': r"^\(\d+, [\w-]{1,19}\)$",
                         'task': r"^[w ]{1,50}$",
-                        'test': r"^\d+$"
+                        'test': r"^\d+$",
+                        'umbrella_sites_options': r"^\([w ]{1,50}, \d{9}\)$"
                         }
 ID_NAMES = {'company': 'ein',
             'department': 'd_id',
             'site_dba': 'reg_comer',
+            'umbrella_sites': 'c_ein',
             'company_phone': '(phone, ein)',
             'site_dba_phone': '(phone, reg_comer)',
             'department_phone': '(phone, d_id',
@@ -26,7 +29,8 @@ ID_NAMES = {'company': 'ein',
             'department_options': '(gather, d_id)',
             'site_dba_options': '(gather, reg_comerciante)',
             'test': 'test_id',
-            'task': 'task_id'
+            'task': 'task_id',
+            'umbrella_sites_options': '(gather, c_ein)'
             }
 
 

@@ -19,11 +19,13 @@ def connect2django():
         cur: connection cursor
 
     """
-    conn = psycopg2.connect(host=gv.postgres_host,
-                            database=gv.postgres_database,
-                            user=gv.postgres_user,
-                            password=gv.postgres_password)
-    cur = conn.cursor()
-
+    try:
+        conn = psycopg2.connect(host=gv.postgres_host,
+                                database=gv.postgres_database,
+                                user=gv.postgres_user,
+                                password=gv.postgres_password)
+        cur = conn.cursor()
+    except:
+        return {'error': True}
     result = {'conn': conn, 'cur': cur, 'error': False}
     return result

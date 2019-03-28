@@ -81,12 +81,8 @@ WSGI_APPLICATION = 'phosrv.wsgi.application'
 DATABASES = {
 
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ["postgres_database"],
-        'USER': os.environ["postgres_user"],
-        'PASSWORD': os.environ["postgres_password"],
-        'HOST': os.environ["postgres_host"],
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
     }
 }
 """
