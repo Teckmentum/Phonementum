@@ -3,13 +3,25 @@ from db_manager import db_getters
 import global_settings as gv
 from twilio.twiml.voice_response import VoiceResponse, Gather, Say
 from django.http import HttpResponse, HttpRequest
+
+'''
+TASK NAMES
+'''
 HERMES_LIST_SITES = 'list_sites'
 HERMES_REDIRECT_CALL = 'redirect_call'
 
+'''
+Todos los task de Hermes su objetivo es devolver un Twiml. Este Twiml sera uno de dos tipos:
+1. twiml_task_gather
+2. twiml_task_gatherless
+Tambien este metodo debe de asegurarse q en el Hermes Session se encuentre el task para el CallSid adecuado.
 
+Estos task son llamados desde el Hermes View: hermes_task. Hermer Task Manager no se conecta con Twilio como tal.
+
+'''
 def list_sites(request):
     """
-    This method get all sites for an umbrella company at the umbrella_sites_options,
+    This method get all sites for an umbrella company at the umbrella_sites_options table,
     add the task to the session and set the twiml_xml.
     For this the method need the id for the company, entity_name='umbrella_sites'
     and the call_sid
@@ -123,14 +135,15 @@ def get_nereast_location():
 
 def redirect_call(request: HttpRequest, call_sid, entity_id, entity_name, phone_number: int = None, task_values: dict = None) -> object:
     """
-    el metofo pregunta al usuario si quiere ser redireccionado si dice que no el metodo
-    le cuelga. Si dice q si lo manda a un numero de telefono o sip. Lo q se encarga el metodo es en el session dr hermes
+    el metodo pregunta al usuario si quiere ser redireccionado si dice que no el metodo
+    le cuelga. Si dice q si lo manda a un numero de telefono o sip. Lo q se encarga el metodo es en el session de hermes
     anadir para un callsid el task de redirect call con los valores q necesita dicho task. Como el task depende
     de un gather este tsk necesita las variables q gather solicita
     Args:
         entity_id: id of the entity been worked
         phone_number: numero de telefono donde se redireccionara la llamada
-        task_values: diccionario que debe de cotener redirect_msg y goodbye_msg
+        task_values: diccionario que debe de cotener redirect_msg y
+
 
     Returns:
 
@@ -156,6 +169,7 @@ def redirect_call(request: HttpRequest, call_sid, entity_id, entity_name, phone_
         result[gv.gv.ERROR] = True
         result[gv.gv.STATUS] = 500
 
+    '''
     # set task id
     task_id = hhelper.set_task_id(entity_id=entity_id, task_name=HERMES_REDIRECT_CALL)
 
@@ -185,5 +199,5 @@ def redirect_call(request: HttpRequest, call_sid, entity_id, entity_name, phone_
 
     #redirect call to gather
 
-
+    '''
 

@@ -33,7 +33,7 @@ def greetings(request):
 @csrf_exempt
 def incoming_voice_call_lobby(request):
     """
-    This method extract from _phone table the twiml_xml value. To work it need
+    This method extract from _phone table the twiml_xml value. For properly function this method need
     entity_name, id, callsid and To. Callsid and To los provee twilio pero
     entity_name amd id tienen q estar en los query parameters.
     Args:
@@ -108,11 +108,15 @@ def incoming_voice_call_gather(request):
         1. This method use te query parameter isLocal to decide where the gather options are going to be look up.
         if True then the gather option for the taskId have to be at request.session at [callsid][taskid][gather_options]
         if false then the gather option need to be in a table at the db with the table name been equal tu entityname_options
+        2. el valor de la variable isLocal es por default set to false si no es pasada en los query parameters
+        3. este metodo verifica primero si el task esta ya en sesion para el callsid correspondiente y si no esta lo
+        +busca en Hermes DB pero si es local esto no deberia pasar pero debemos tomar en cuenta q
+        "CUANDO UNICO ISLOCAL ESTA EN TRUE ES PQ EL MISMO HERMES LO PUSO"
     """
     print('esta entrando en el area de gather')
     # get parameters
     parameters = hhelper.get_parameters(request, post_param=[gv.CALL_SID, gv.SELECTION], get_param=[gv.ENTITY_NAME, gv.TASK_NAME])
-    parameters['isLocal'] = request.GET.get('isLocal') if request.GET.get('isLocal')is None else False
+    parameters['isLocal'] = request.GET.get('isLocal') if request.GET.get('isLocal')is None else False #set isLocal to false if not value passed
 
     # verify for get_and_validate_parameters errors
     if parameters[gv.ERROR]:
@@ -186,6 +190,9 @@ def hermes_task(request, hermes_task=None):
 
     if hermes_task == htask.HERMES_LIST_SITES:
         result = htask.list_sites(request)
+
+    elif hermes_task == htask.HERMES_REDIRECT_CALL:
+        result = htask.redirect_call()
 
     if result[gv.ERROR] is True:
         return HttpResponse(result[gv.MESSAGE], status=result[gv.STATUS])
