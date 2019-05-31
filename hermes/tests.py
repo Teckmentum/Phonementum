@@ -35,3 +35,7 @@ class HermesRemoteTaskTestCase(TestCase):
 
         print(result.text)
 
+    def test_redirect_call(self):
+        result = requests.post(url=self.HOST + 'hermes/task/redirect_call?id=000008830&entity_name=umbrella_sites',
+                               data={'To': '14154171040', 'Digits': 2, 'CallSid': 'callSID_test'})
+

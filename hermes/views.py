@@ -13,8 +13,9 @@ import json
 
 """
 session = {callsid: {taskid:{var_values={},...}, taskid:{var_values={},...}}
-           callsid: {taskid:{var_values={},...}, taskid:{var_values={}, gater_option={1: xml, 2:xml}}}
+           callsid: {taskid:{var_values={},...}, taskid:{var_values={}, gater_option={1: xml, 2:xml}}}  
           }
+    La opcion de gather option dentro de taskid es para los hermestask cm redirectcall
 """
 @csrf_exempt
 def greetings(request):
@@ -99,7 +100,8 @@ def incoming_voice_call_gather(request):
     """
     This method get an twiml_xml from an option table and return it. Gather method work only
     on _options table at hermes db. The request need to pass, callsid, to, id, entity_name, taskname.
-    Funciona para cualquier task q necesite un gather, as long haya una tabala en el db taskname_options
+    Funciona para cualquier task q necesite un gather, as long haya una tabala en el db taskname_options o se haya anadido con anterioridad
+    en el session opciones para el task (si esto es asi isLocal necesitga estar en true)
     Args:
         request ():
 
@@ -112,6 +114,7 @@ def incoming_voice_call_gather(request):
         3. este metodo verifica primero si el task esta ya en sesion para el callsid correspondiente y si no esta lo
         +busca en Hermes DB pero si es local esto no deberia pasar pero debemos tomar en cuenta q
         "CUANDO UNICO ISLOCAL ESTA EN TRUE ES PQ EL MISMO HERMES LO PUSO"
+        4. Entity_name can be one of the following: company, department, umbrella, site_dba, task
     """
     print('esta entrando en el area de gather')
     # get parameters
@@ -128,7 +131,7 @@ def incoming_voice_call_gather(request):
         print(validation[gv.MESSAGE])
         return HttpResponse(validation[gv.MESSAGE], status=validation['status'])
 
-    # VERIFY IF GATHER TASK for callerSID ALREADY IN HERMES_SESSION if not set
+    # VERIFY IF TASK for callerSID ALREADY IN HERMES_SESSION if not set
     # todo se deberia del mensaje de option not recognized cuando se vayan a repetir las opciones buscar si hay un
     # twiml after lobby y repetirlo
     taskID = parameters[gv.ID] + parameters[gv.TASK_NAME]
@@ -139,19 +142,19 @@ def incoming_voice_call_gather(request):
 
         request.session[parameters[gv.CALL_SID]][taskID]['tries'] = 1
 
-    # validate gather selection within range
-    if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][taskID]['var_values']['range']:
+    # validate gather selection within range. Para esta seccion los valores que necesita gather tienen que estar en session para el task gather
+    if int(parameters[gv.SELECTION]) > request.session[parameters[gv.CALL_SID]][parameters[gv.ID] + 'gather']['var_values']['range']:
         # verify if tries are done
-        if request.session[parameters[gv.CALL_SID]][taskID]['tries'] > request.session[parameters[gv.CALL_SID]][taskID]['var_values'][gv.MAX_TRIES]:
-            temp_response = request.session[parameters[gv.CALL_SID]][taskID]['var_values'][gv.MAX_TRY_MESG]
+        if request.session[parameters[gv.CALL_SID]][parameters[gv.ID] + 'gather']['tries'] > request.session[parameters[gv.CALL_SID]][parameters[gv.ID] + 'gather']['var_values'][gv.MAX_TRIES]:
+            temp_response = request.session[parameters[gv.CALL_SID]][parameters[gv.ID] + 'gather']['var_values'][gv.MAX_TRY_MESG]
             del request.session[parameters[gv.CALL_SID]][taskID]
             return HttpResponse(temp_response)
 
         # increase tries and return option not recognized message
-        request.session[parameters[gv.CALL_SID]][taskID]['tries'] += 1
+        request.session[parameters[gv.CALL_SID]][parameters[gv.ID] + 'gather']['tries'] += 1
         request.session.modified = True
         print(request.session[parameters[gv.CALL_SID]].keys())
-        return HttpResponse(request.session[parameters[gv.CALL_SID]][taskID]['var_values']['option_not_recognized'])
+        return HttpResponse(request.session[parameters[gv.CALL_SID]][parameters[gv.ID] + 'gather']['var_values']['option_not_recognized'])
 
     # get twiml_xml for selected option
     twiml_xml = {}

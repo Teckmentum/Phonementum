@@ -133,7 +133,7 @@ def get_nereast_location():
     pass
 
 
-def redirect_call(request: HttpRequest, call_sid, entity_id, entity_name, phone_number: int = None, task_values: dict = None) -> object:
+def redirect_call(request: HttpRequest, phone_number: int = None, task_values: dict = None) -> object:
     """
     el metodo pregunta al usuario si quiere ser redireccionado si dice que no el metodo
     le cuelga. Si dice q si lo manda a un numero de telefono o sip. Lo q se encarga el metodo es en el session de hermes
@@ -142,7 +142,7 @@ def redirect_call(request: HttpRequest, call_sid, entity_id, entity_name, phone_
     Args:
         entity_id: id of the entity been worked
         phone_number: numero de telefono donde se redireccionara la llamada
-        task_values: diccionario que debe de cotener redirect_msg y
+        task_values: diccionario que debe de cotener redirect_msg,
 
 
     Returns:
